@@ -1,0 +1,13 @@
+services:
+    newscoop_articles_calendar.hooks.listener:
+        class: "Newscoop\ArticlesCalendarBundle\EventListener\HooksListener"
+        arguments: ["@service_container"]
+        tags:
+          - { name: kernel.event_listener, event: newscoop_admin.interface.article.edit.sidebar, method: sidebar }
+
+    newscoop_articles_calendar.lifecyclesubscriber:
+        class: Newscoop\ArticlesCalendarBundle\EventListener\LifecycleSubscriber
+        arguments:
+            - @em
+        tags:
+            - { name: kernel.event_subscriber}

@@ -1,0 +1,159 @@
+@charset "utf-8";
+/* CSS Document */
+
+.articles-calendar {
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.articles-calendar-full {
+    max-width:980px;
+}
+
+.articles-calendar table {
+    width:100%;
+    padding:0;
+    border-collapse:collapse;
+
+    
+}
+.articles-calendar table td {
+    padding:0;
+    width:14.285%;
+
+}
+
+.articles-calendar table th {
+    padding:0 0 6px 0;
+    font-weight:normal;
+    text-transform:uppercase;
+    position:relative;
+    height:25px;
+    font-size:12px;
+}
+
+.articles-calendar .articles-date-content {
+    position:relative;
+    margin:5px;
+    background:#ebebeb;
+    border:1px solid #a9a9a9;
+    min-height:85px;
+    -mozilla-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.articles-calendar .articles-date-content a {
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    overflow:hidden;
+    z-index:1;
+    text-decoration:none;
+}
+.articles-calendar .articles-date-content a img {
+    width:100%;
+    min-height:85px;
+}
+.articles-calendar .articles-other-month .articles-date-content a img {
+    opacity:0.6;
+}
+
+.articles-calendar .articles-other-month .articles-date-content a:hover img {
+    opacity:1;
+}
+
+.articles-calendar .articles-date-container {
+    position:absolute;
+    top:0;
+    bottom:0;
+    right:0;
+    left:0;
+    margin: 0;
+    z-index:11;
+    border:none;
+}
+.articles-calendar .articles-date-label {
+        opacity:0.7;
+    position:relative;
+    margin: 25px auto 0 auto;
+    font-size:18px;
+    text-align:center;
+    width:33px;
+    line-height:33px;
+    height:33px;
+    color:#1a1a1a;
+    z-index:12;
+    background:#fff;
+    border:1px solid #a5a5a5;
+}
+.articles-calendar .articles-date-label.articles-today {
+    border: 1px solid #14d878;
+    color: #14d878;
+}
+.articles-calendar .articles-date-content a:hover .articles-date-label {
+    opacity:0.7;
+    margin: 28px auto 0 auto;
+    font-size:15px;
+    width:29px;
+    line-height:29px;
+    height:29px;
+}
+.articles-calendar .articles-other-month .articles-date-content {
+    background:#f2f2f2;
+}
+
+.articles-calendar .articles-other-month .articles-date-label{
+    color:#acacac;
+}
+
+.articles-calendar-nav {
+    list-style-type:none;
+    margin:5px 0 0 0;
+    padding:0;
+    height:18px;
+    width:100%;
+
+}
+.articles-calendar-nav li {
+    padding:0;
+    float:right;
+    margin: 0 0 0 6px;
+}
+.articles-calendar-nav li:first-child {
+    margin-right: 5px;
+}
+.articles-calendar-nav li.articles-calendar-month {
+    text-align:center;
+}
+.articles-calendar-nav li.articles-calendar-month p {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+    line-height:18px;
+    margin: 0;
+    color: #A5A5A5;
+    padding: 0 0 0 0;
+    text-align: right;
+}
+.articles-calendar-nav li.articles-button-prev, .articles-calendar-nav li.articles-button-next {
+    height: 18px;
+    width: 24px;
+}
+.articles-calendar-nav li.articles-button-prev a, .articles-calendar-nav li.articles-button-next a {
+    background: url(img/calendar-arrows.png) no-repeat 0 0;
+    display: block;
+    height: 18px;
+    width: 24px;
+    text-indent: -9999px;
+
+}
+
+.articles-calendar-nav li.articles-button-prev a {
+    background-position: 0 -56px;
+}
+
+.articles-calendar-nav li.articles-button-prev.disabled a, .articles-calendar-nav li.articles-button-next.disabled a {
+    background-position: 0 -28px;
+    cursor: default;
+}
