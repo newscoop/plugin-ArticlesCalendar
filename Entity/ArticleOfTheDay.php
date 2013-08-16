@@ -11,7 +11,7 @@ namespace Newscoop\ArticlesCalendarBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
- * Facebook informations entity
+ * Article of the day entity
  *
  * @ORM\Entity()
  * @ORM\Table(name="plugin_articles_calendar_article_of_the_day")

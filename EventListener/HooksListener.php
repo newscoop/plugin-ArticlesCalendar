@@ -31,6 +31,7 @@ class HooksListener
             ->createQueryBuilder('a')
             ->where('a.articleNumber = :articleNumber')
             ->andWhere('a.articleLanguageId = :articleLanguageId')
+            ->andWhere('a.publicationId = :publicationId')
             ->setParameters(array(
                 'articleNumber' => $article->getNumber(),
                 'articleLanguageId' => $article->getLanguageId(),
@@ -47,7 +48,8 @@ class HooksListener
         $form = $this->container->get('form.factory')->create(new ArticleOfTheDayType(), array(
             'custom_date' => $articleOfTheDayDate->format('Y-m-d'),
             'articleId' => $article->getNumber(),
-            'articleLanguageId' => $article->getLanguageId()
+            'articleLanguageId' => $article->getLanguageId(),
+            'publicationId' => $article->getPublicationId()
         ), array());
 
         $response = $this->container->get('templating')->renderResponse(
