@@ -57,7 +57,8 @@ class HooksListener
             array(
                 'article' => $article,
                 'form' => $form->createView(),
-                'status' => $status, 
+                'status' => $status,
+                'error' => array('exists' => false, 'error' => false), 
                 'articleOfTheDay' => $articleOfTheDay
             )
         );

@@ -44,7 +44,6 @@ class DefaultController extends Controller
 
         $now = new \DateTime("$today[0]-$today[1]");
 
-        // oldest month user can scroll to YYYY/mm
         $earliestMonth = $request->get('earliestMonth');
         if (isset($earliestMonth) && $earliestMonth == 'current') {
             $earliestMonth = $today;
@@ -59,7 +58,6 @@ class DefaultController extends Controller
             $earliestMonth = null;
         }
 
-        // most recent month user can scroll to YYYY/mm
         $latestMonth = $request->get('latestMonth', null);
         if (isset($latestMonth) && $latestMonth == 'current') {
             $latestMonth = $today;
@@ -94,7 +92,7 @@ class DefaultController extends Controller
     */
     public function getArticlesOfTheDayAction(Request $request)
     {   
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->container->get('em');
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
         $imageWidth = $request->get('image_width', 140);
@@ -104,7 +102,6 @@ class DefaultController extends Controller
             ->getQuery()
             ->getResult();
 
-        //get what we need for the json returned data.
         $results = array();
 
         foreach ($articlesOfTheDay as $dayArticle) {
@@ -124,9 +121,9 @@ class DefaultController extends Controller
             $YMD = explode("-", $date[0]);
 
             $element['date'] = array(
-                "year"=>intval($YMD[0]),
-                "month"=>intval($YMD[1]),
-                "day"=>intval($YMD[2])
+                "year" => intval($YMD[0]),
+                "month" => intval($YMD[1]),
+                "day" => intval($YMD[2])
             );
             $element['url'] = \ShortURL::GetURL($dayArticle->getArticle()->getPublicationId(), $dayArticle->getArticle()->getLanguageId(), null, null, $articleNumber);
 
@@ -167,9 +164,40 @@ class DefaultController extends Controller
                     'number' => $data['articleId']
                 ));
 
+                $date = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')->findOneBy(array(
+                    'date' => new \DateTime($data['custom_date'])
+                ));
+
+                if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
+                    return $this->container->get('templating')->renderResponse(
+                        'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+                        array(
+                            'article' => $article,
+                            'form' => $form->createView(),
+                            'status' => $status,
+                            'error' => array('exists' => true, 'error' => false),
+                            'articleOfTheDay' => $articleOfTheDay
+                        )
+                    );
+                }
+
+                if ($date) {
+                    return $this->container->get('templating')->renderResponse(
+                        'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+                        array(
+                            'article' => $article,
+                            'form' => $form->createView(),
+                            'status' => $status,
+                            'error' => array('exists' => false, 'error' => true),
+                            'articleOfTheDay' => $articleOfTheDay
+                        )
+                    );
+                }
+                
                 if ($articleOfTheDay) {
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                 } else {
+                    $this->dateExists($em, new \DateTime($data['custom_date']));
                     $articleOfTheDay = new ArticleOfTheDay();
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setArticle($article);
@@ -187,6 +215,7 @@ class DefaultController extends Controller
                 'article' => $article,
                 'form' => $form->createView(),
                 'status' => $status,
+                'error' => array('exists' => false, 'error' => false),
                 'articleOfTheDay' => $articleOfTheDay
             )
         );

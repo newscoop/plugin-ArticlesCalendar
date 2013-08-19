@@ -2,6 +2,10 @@
 <div class="js-articleoftheday-status">Status: <span class="js-articleoftheday-status-value">{% if status %}YES{% else %}NO{% endif %}</span></div>
 <div class="js-articleoftheday-date">Date: <span class="js-articleoftheday-date-value">{% if status %}{{ articleOfTheDay.date|date('Y-m-d')}}{% else %}....-..-..{% endif %}</span><span class="js-articleoftheday-date-change">{% if status %} (<a href="#">change</a>){% endif %}</span></div>
 
+<div class="js-articleoftheday-error">
+{% if error.exists %}You set the same date.{% endif %}
+{% if error.error %}Article with chosen date is already set! {% endif %}
+</div>
 <div class="js-articleoftheday-change-date-box {% if status %}js-articleoftheday-change-date-box-hide{% endif %}">
     <form id="js-articleoftheday-changeForm" action="{{ path('newscoop_articlescalendar_default_setarticlesoftheday') }}" method="post" {{ form_enctype(form) }}>
         {{ form_row(form.articleId) }}
