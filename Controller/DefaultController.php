@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay;
 use Newscoop\ArticlesCalendarBundle\Form\Type\ArticleOfTheDayType;
 
@@ -93,6 +92,15 @@ class DefaultController extends Controller
     */
     public function getArticlesOfTheDayAction(Request $request)
     {   
+        $response = new Response();
+        $datetime = new \DateTime(date('Y-m-d h').':00:00');
+        $response->setLastModified($datetime);
+        $response->setPublic();
+
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
+
         $em = $this->container->get('em');
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
@@ -100,6 +108,7 @@ class DefaultController extends Controller
 
         $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
+            ->where('a.is_active = true')
             ->getQuery()
             ->getResult();
 
@@ -131,7 +140,10 @@ class DefaultController extends Controller
             $results[] = $element;
         }
 
-        return new JsonResponse(array('articles' => $results));
+        $response->setContent(json_encode(array('articles' => $results)));
+        $response->headers->set('Content-Type', 'application/json');
+        
+        return $response;
     }
 
     /**
@@ -182,7 +194,7 @@ class DefaultController extends Controller
                             )
                         );
                     }
-                    
+
                     if ($date) {
                         return $this->container->get('templating')->renderResponse(
                             'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
