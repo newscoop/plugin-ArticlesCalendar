@@ -14,7 +14,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay;
 use Newscoop\ArticlesCalendarBundle\Form\Type\ArticleOfTheDayType;
 
@@ -156,6 +155,8 @@ class DefaultController extends Controller
         $em = $this->container->get('em');
         $form = $this->container->get('form.factory')->create(new ArticleOfTheDayType(), array(), array());
         $status = false;
+        $exists = false;
+        $error = false;
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -187,79 +188,45 @@ class DefaultController extends Controller
 
                 if ($request->get('_route') === "newscoop_articlescalendar_default_unmark") {
 
+                    $status = false;
                     $articleOfTheDay->setIsActive(false);
                     $em->flush();
 
-                    return $this->container->get('templating')->renderResponse(
-                        'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                        array(
-                            'article' => $article,
-                            'form' => $form->createView(),
-                            'status' => false,
-                            'error' => array('exists' => false, 'error' => false),
-                            'articleOfTheDay' => $articleOfTheDay
-                        )
-                    );
+                    return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                 }
 
                 if ($articleOfTheDay) {
+                    $status = true;
 
                     if ($articleOfTheDay->getIsActive() == false) {
                         
                         $articleOfTheDay->setIsActive(true);
                         $em->flush();
 
-                        return $this->container->get('templating')->renderResponse(
-                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                            array(
-                                'article' => $article,
-                                'form' => $form->createView(),
-                                'status' => $status,
-                                'error' => array('exists' => false, 'error' => false),
-                                'articleOfTheDay' => $articleOfTheDay
-                            )
-                        );
+                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
 
                     if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
-                        return $this->container->get('templating')->renderResponse(
-                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                            array(
-                                'article' => $article,
-                                'form' => $form->createView(),
-                                'status' => $status,
-                                'error' => array('exists' => true, 'error' => false),
-                                'articleOfTheDay' => $articleOfTheDay
-                            )
-                        );
+                        $exists = true;
+
+                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
             
                     if ($date) {
+                        $exists = false;
+                        $error = true;
 
-                        return $this->container->get('templating')->renderResponse(
-                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                            array(
-                                'article' => $article,
-                                'form' => $form->createView(),
-                                'status' => $status,
-                                'error' => array('exists' => false, 'error' => true),
-                                'articleOfTheDay' => $articleOfTheDay
-                            )
-                        );
+                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
 
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                 } else {
                     if ($date) {
-                        return $this->container->get('templating')->renderResponse(
-                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                            array(
-                                'article' => $article,
-                                'form' => $form->createView(),
-                                'status' => false,
-                                'error' => array('exists' => false, 'error' => true),
-                            )
-                        );
+                        $status = false;
+                        $exists = false;
+                        $error = true;
+
+                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
 
                     $articleOfTheDay = new ArticleOfTheDay();
@@ -273,13 +240,29 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->container->get('templating')->renderResponse(
-            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
+    }
+
+    /**
+     * Returns data for given parameters
+     *
+     * @param entity object               $article         Article
+     * @param Symfony\Component\Form\Form $form            Form
+     * @param bool                        $status          Article of the day status
+     * @param bool                        $exists          Shows message if an article exists
+     * @param bool                        $error           Shows error message
+     * @param entity object               $articleOfTheDay Article of the day
+     *
+     * @return array
+     */
+    private function returnData($article, $form, $status, $exists, $error, $articleOfTheDay) {
+        
+        return $this->container->get('templating')->renderResponse('NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
             array(
                 'article' => $article,
                 'form' => $form->createView(),
                 'status' => $status,
-                'error' => array('exists' => false, 'error' => false),
+                'error' => array('exists' => $exists, 'error' => $error),
                 'articleOfTheDay' => $articleOfTheDay
             )
         );
