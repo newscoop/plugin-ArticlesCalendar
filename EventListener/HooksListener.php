@@ -32,10 +32,12 @@ class HooksListener
             ->where('a.articleNumber = :articleNumber')
             ->andWhere('a.articleLanguageId = :articleLanguageId')
             ->andWhere('a.publicationId = :publicationId')
+            ->andWhere('a.is_active = :is_active')
             ->setParameters(array(
                 'articleNumber' => $article->getNumber(),
                 'articleLanguageId' => $article->getLanguageId(),
-                'publicationId' => $article->getPublicationId()
+                'publicationId' => $article->getPublicationId(),
+                'is_active' => true
             ))
             ->getQuery()
             ->getOneOrNullResult();

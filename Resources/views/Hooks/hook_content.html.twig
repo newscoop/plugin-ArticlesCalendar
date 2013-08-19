@@ -1,7 +1,8 @@
 <div class="article-data" data-article-number="{{ article.getNumber() }}" data-article-language="{{ article.getLanguageId() }}"></div>
 <div class="js-articleoftheday-status">Status: {% if status %}<span class="js-articleoftheday-status-yes">Yes</span>{% else %}<span class="js-articleoftheday-status-no">No</span>{% endif %}</div>
-<div class="js-articleoftheday-date">Date: <span class="js-articleoftheday-date-value">{% if status %}{{ articleOfTheDay.date|date('Y-m-d')}}{% else %}not set{% endif %}</span><span class="js-articleoftheday-date-change">{% if status %} (<a href="#">change</a>){% endif %}</span><input type="submit" style="float: right;" value="Unmark" name="articleofthedayform_submit" class="button"></div>
+<div class="js-articleoftheday-date">Date: <span class="js-articleoftheday-date-value">{% if status %}{{ articleOfTheDay.date|date('Y-m-d')}}{% else %}not set{% endif %}</span><span class="js-articleoftheday-date-change">{% if status %} (<a href="#">change</a>){% endif %}</span>{% if status %}<input type="submit" id="unmark-btn" style="float: right;" value="Unmark" name="articleofthedayform_submit" class="button">{% endif %}</div>
 
+<div class="js-articleoftheday-unmark-msg"></div>
 {% if error.exists %}<div class="js-articleoftheday-date-info">You set the same date.</div>{% endif %}
 {% if error.error %}<div class="js-articleoftheday-date-error">Article with chosen date is already set!</div>{% endif %}
 <div class="js-articleoftheday-change-date-box {% if status %}js-articleoftheday-change-date-box-hide{% endif %}">

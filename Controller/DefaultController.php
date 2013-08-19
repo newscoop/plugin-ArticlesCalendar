@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay;
 use Newscoop\ArticlesCalendarBundle\Form\Type\ArticleOfTheDayType;
 
@@ -148,6 +149,7 @@ class DefaultController extends Controller
 
     /**
     * @Route("/plugin/articlescalendar/articlesoftheday/set")
+    * @Route("/plugin/articlescalendar/articlesoftheday/unmark", name="newscoop_articlescalendar_default_unmark")
     */
     public function setArticlesOfTheDayAction(Request $request)
     {   
@@ -165,9 +167,11 @@ class DefaultController extends Controller
                     ->createQueryBuilder('a')
                     ->where('a.articleNumber = :articleNumber')
                     ->andWhere('a.articleLanguageId = :articleLanguageId')
+                    ->andWhere('a.publicationId = :publicationId')
                     ->setParameters(array(
                         'articleNumber' => $data['articleId'],
-                        'articleLanguageId' => $data['articleLanguageId']
+                        'articleLanguageId' => $data['articleLanguageId'],
+                        'publicationId' => $data['publicationId']
                     ))
                     ->getQuery()
                     ->getOneOrNullResult();
@@ -181,7 +185,42 @@ class DefaultController extends Controller
                     'date' => new \DateTime($data['custom_date'])
                 ));
 
+                if ($request->get('_route') === "newscoop_articlescalendar_default_unmark") {
+
+                    $articleOfTheDay->setIsActive(false);
+                    $em->flush();
+
+                    return $this->container->get('templating')->renderResponse(
+                        'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+                        array(
+                            'article' => $article,
+                            'form' => $form->createView(),
+                            'status' => false,
+                            'error' => array('exists' => false, 'error' => false),
+                            'articleOfTheDay' => $articleOfTheDay
+                        )
+                    );
+                }
+
                 if ($articleOfTheDay) {
+
+                    if ($articleOfTheDay->getIsActive() == false) {
+                        
+                        $articleOfTheDay->setIsActive(true);
+                        $em->flush();
+
+                        return $this->container->get('templating')->renderResponse(
+                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+                            array(
+                                'article' => $article,
+                                'form' => $form->createView(),
+                                'status' => $status,
+                                'error' => array('exists' => false, 'error' => false),
+                                'articleOfTheDay' => $articleOfTheDay
+                            )
+                        );
+                    }
+
                     if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
                         return $this->container->get('templating')->renderResponse(
                             'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
@@ -194,8 +233,9 @@ class DefaultController extends Controller
                             )
                         );
                     }
-
+            
                     if ($date) {
+
                         return $this->container->get('templating')->renderResponse(
                             'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
                             array(
