@@ -1,0 +1,60 @@
+<style type="text/css" media="screen">
+.hook-content {font-size: 12px;}
+.hook-content h4{margin-bottom: 0px;padding-bottom: 0px;margin-top: 15px;}
+.hook-content .save-button {display: block;float: right;}
+.js-articleoftheday-change-date-box-hide {display: none;}
+.js-articleoftheday-date-change a{font-size: 11px; color: #007fb3;}
+.js-articleoftheday-date-info {color: #c09853; padding: 5px 0;}
+.js-articleoftheday-date-error {color: #b94a48; padding: 5px 0;}
+.js-articleoftheday-status {padding: 5px 0;}
+.js-articleoftheday-status-yes {color: #468847;}
+.js-articleoftheday-status-no {color: #b94a48;}
+.js-articleoftheday-date {padding: 5px 0;}
+.js-articleoftheday-unmark-msg {padding: 5px 0; color: #468847;}
+</style>
+<div class="articlebox articleoftheday" title="Article of the day">
+    <div class="hook-content">
+        {{ include('NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig') }}
+    </div>
+</div>
+
+<script type="text/javascript">
+$('#unmark-btn').live('click', function(e) {
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "{{ path('newscoop_articlescalendar_default_unmark') }}",
+        data: $('#js-articleoftheday-changeForm').serialize(),
+        dataType: "html",
+        success: function(msg){
+            $('.articleoftheday .hook-content').html(msg);
+            $('.js-articleoftheday-unmark-msg').append('Article successfully unmarked.');
+            $('.datepicker').datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        }
+    });
+});
+
+$('#js-articleoftheday-changeForm').live('submit', function(e){
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "{{ path('newscoop_articlescalendar_default_setarticlesoftheday') }}",
+        data: $('#js-articleoftheday-changeForm').serialize(),
+        dataType: "html",
+        success: function(msg){
+            $('.articleoftheday .hook-content').html(msg);
+            $('.datepicker').datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+        }
+    });
+});
+
+$('.js-articleoftheday-date-change a').live('click', function(e){
+    e.preventDefault();
+
+    $('.js-articleoftheday-change-date-box').show()
+})
+</script>
