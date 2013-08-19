@@ -1,0 +1,4 @@
+newscoop_articles_calendar:
+    resource: "@NewscoopArticlesCalendarBundle/Controller/DefaultController.php"
+    type: annotation
+    prefix: /

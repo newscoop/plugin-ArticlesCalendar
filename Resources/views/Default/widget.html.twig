@@ -1,0 +1,70 @@
+<script type="text/javascript" src="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/js/jquery.articlescalendar.js"></script>
+<link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/css/articles_calendar.css">
+
+<div id="wobs_calendar_{{ randomInt }}" class="thumb-calendar"></div>
+
+<script>
+function formatDate(date)
+{
+    var s = '';
+    var yyyy, mm, dd;
+
+    yyyy = date.getFullYear();
+    mm = date.getMonth()+1;
+    mm = mm.toString();
+    dd = date.getDate();
+    dd = dd.toString();
+
+    if (mm.length === 1) {
+        mm = "0"+mm;
+    }
+    if (dd.length === 1) {
+        dd = "0"+dd;
+    }
+
+    s = yyyy + "-" + mm + "-" + dd;
+    return s;
+}
+
+function getArticlesOfTheDay( start, end, callback )
+{
+    var search_start, search_end;
+
+    search_start = formatDate(start);
+    search_end = formatDate(end);
+
+    $.post("{{ Newscoop['WEBSITE_URL'] }}/plugin/articlescalendar/articlesoftheday/get",
+        {"format": "json", "start": search_start, "end": search_end, "image_width": 140},
+        function(data){
+            callback(data.articles);
+        },
+        "json"
+    );
+}
+
+$("#wobs_calendar_{{ randomInt }}").wobscalendar({
+    'today': new Date('{{today[0] }}', '{{ today[1]-1 }}', '{{ today[2] }}'),
+    'date': new Date('{{ year }}', '{{ month }}'),
+    'articles': getArticlesOfTheDay,
+    'defaultView': '{{ defaultView }}',
+    'firstDay': {{ firstDay }},
+    'navigation': {% if nav %} true {% else %} false {% endif %},
+    'showDayNames': {% if dayNames %} true {% else %} false {% endif %},
+    'earliestMonth': {% if earliestMonth %} new Date('{{ earliestMonth[0] }}', '{{ earliestMonth[1]-1 }}') {% else %} undefined {% endif %},
+    'latestMonth': {% if latestMonth %} new Date('{{ latestMonth[0] }}', '{{ latestMonth[1]-1 }}') {% else %} undefined {% endif %},
+    'monthNames': [
+        '{{getGS('January')}}', 
+        '{{getGS('February')}}', 
+        '{{getGS('March')}}', 
+        '{{getGS('April')}}',
+        '{{getGS('May')}}', 
+        '{{getGS('June')}}', 
+        '{{getGS('July')}}', 
+        '{{getGS('August')}}',
+        '{{getGS('September')}}', 
+        '{{getGS('October')}}', 
+        '{{getGS('November')}}', 
+        '{{getGS('December')}}'
+    ]
+});
+</script>

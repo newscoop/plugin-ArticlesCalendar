@@ -11,7 +11,7 @@ namespace Newscoop\ArticlesCalendarBundle\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 
 /**
- * Facebook informations entity
+ * Article of the day entity
  *
  * @ORM\Entity()
  * @ORM\Table(name="plugin_articles_calendar_article_of_the_day")
@@ -27,10 +27,29 @@ class ArticleOfTheDay
     private $id;
 
     /**
-     * @ORM\Column(type="integer", name="article")
-     * @var int
+     * @ORM\ManyToOne(targetEntity="Newscoop\Entity\Article")
+     * @ORM\JoinColumns({
+     *      @ORM\JoinColumn(name="article_number", referencedColumnName="Number"),
+     *      @ORM\JoinColumn(name="article_language_id", referencedColumnName="IdLanguage")
+     *  })
      */
     private $article;
+
+    /**
+     * @ORM\Column(type="integer", name="publication_id")
+     */
+    private $publicationId;
+
+    /**
+     * @ORM\Column(type="integer", name="article_number")
+     */
+    private $articleNumber;
+
+    /**
+     * @ORM\Column(type="integer", name="article_language_id")
+     * @var int
+     */
+    private $articleLanguageId;
 
     /**
      * @ORM\Column(type="datetime", name="date")
@@ -66,20 +85,42 @@ class ArticleOfTheDay
     }
 
     /**
-     * Get article id
+     * Get publicationId
+     *
+     * @return integer
+     */
+    public function getPublicationId()
+    {
+        return $this->publicationId;
+    }
+
+    /**
+     * Set publicationId
+     *
+     * @param integer $publicationId
+     *
+     */
+    public function setPublicationId($publicationId)
+    {
+        $this->publicationId = $publicationId;
+
+        return $this;
+    }
+
+    /**
+     * Get article
      *
      * @return string
      */
     public function getArticle()
     {
-        return $this->title;
+        return $this->article;
     }
 
     /**
-     * Set article id
+     * Set article
      *
      * @param integer $article
-     * @return integer
      */
     public function setArticle($article)
     {
@@ -91,7 +132,7 @@ class ArticleOfTheDay
     /**
      * Get date
      *
-     * @return integer
+     * @return DateTime
      */
     public function getDate()
     {
@@ -101,10 +142,9 @@ class ArticleOfTheDay
     /**
      * Set date
      *
-     * @param integer $language
-     * @return integer
+     * @param DateTime $date
      */
-    public function setDate($date)
+    public function setDate(\DateTime $date)
     {
         $this->date = $date;
         

@@ -10,13 +10,11 @@
         'monthNames': ['January','February','March','April','May','June','July','August','September','October','November','December'],
         'navigation': true,
         'showDayNames': true,
-        //'earliestMonth': new Date(2011, 8),
-        //'latestMonth': new Date(2012, 1),
         'articles': "json-events.php",
-        'title': "Artikel des Tages",
+        'title': "Articles of The Day",
         'buttons': {
-            'prev': "Vorheriger Monat",
-            'next': "Nächster Monat"
+            'prev': "Previous Month",
+            'next': "Next Month"
         }
     };
   
@@ -27,8 +25,8 @@
 
             this.each(function(i, _element) {               
                 var element = $(_element);
-                var calendar = new ArticlesCalendar(element, options);
-                element.data('articlescalendar', calendar);
+                var calendar = new WobsCalendar(element, options);
+                element.data('wobscalendar', calendar);
                 calendar.render();              
             });
         
@@ -36,7 +34,7 @@
         }
     };
         
-    $.fn.articlescalendar = function( method ) {
+    $.fn.wobscalendar = function( method ) {
         
         // Method calling logic
         if ( methods[method] ) {
@@ -69,7 +67,7 @@
     }
     
     //element is in jquery form $()
-    function ArticlesCalendar(element, options) {
+    function WobsCalendar(element, options) {
         
         var t = this;
     
@@ -515,5 +513,3 @@
     }
     
 })( jQuery );
-
-
