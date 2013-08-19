@@ -1,6 +1,6 @@
 <div class="article-data" data-article-number="{{ article.getNumber() }}" data-article-language="{{ article.getLanguageId() }}"></div>
 <div class="js-articleoftheday-status">Status: {% if status %}<span class="js-articleoftheday-status-yes">Yes</span>{% else %}<span class="js-articleoftheday-status-no">No</span>{% endif %}</div>
-<div class="js-articleoftheday-date">Date: <span class="js-articleoftheday-date-value">{% if status %}{{ articleOfTheDay.date|date('Y-m-d')}}{% else %}....-..-..{% endif %}</span><span class="js-articleoftheday-date-change">{% if status %} (<a href="#">change</a>){% endif %}</span></div>
+<div class="js-articleoftheday-date">Date: <span class="js-articleoftheday-date-value">{% if status %}{{ articleOfTheDay.date|date('Y-m-d')}}{% else %}not set{% endif %}</span><span class="js-articleoftheday-date-change">{% if status %} (<a href="#">change</a>){% endif %}</span></div>
 
 {% if error.exists %}<div class="js-articleoftheday-date-info">You set the same date.</div>{% endif %}
 {% if error.error %}<div class="js-articleoftheday-date-error">Article with chosen date is already set!</div>{% endif %}

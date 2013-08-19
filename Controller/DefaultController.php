@@ -2,6 +2,7 @@
 /**
  * @package Newscoop\ArticlesCalendarBundle
  * @author Paweł Mikołajczuk <pawel.mikolajczuk@sourcefabric.org>
+ * @author Rafał Muszyński <rafal.muszynski@sourcefabric.org>
  * @copyright 2013 Sourcefabric o.p.s.
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
@@ -168,36 +169,47 @@ class DefaultController extends Controller
                     'date' => new \DateTime($data['custom_date'])
                 ));
 
-                if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
-                    return $this->container->get('templating')->renderResponse(
-                        'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                        array(
-                            'article' => $article,
-                            'form' => $form->createView(),
-                            'status' => $status,
-                            'error' => array('exists' => true, 'error' => false),
-                            'articleOfTheDay' => $articleOfTheDay
-                        )
-                    );
-                }
-
-                if ($date) {
-                    return $this->container->get('templating')->renderResponse(
-                        'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                        array(
-                            'article' => $article,
-                            'form' => $form->createView(),
-                            'status' => $status,
-                            'error' => array('exists' => false, 'error' => true),
-                            'articleOfTheDay' => $articleOfTheDay
-                        )
-                    );
-                }
-                
                 if ($articleOfTheDay) {
+                    if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
+                        return $this->container->get('templating')->renderResponse(
+                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+                            array(
+                                'article' => $article,
+                                'form' => $form->createView(),
+                                'status' => $status,
+                                'error' => array('exists' => true, 'error' => false),
+                                'articleOfTheDay' => $articleOfTheDay
+                            )
+                        );
+                    }
+                    
+                    if ($date) {
+                        return $this->container->get('templating')->renderResponse(
+                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+                            array(
+                                'article' => $article,
+                                'form' => $form->createView(),
+                                'status' => $status,
+                                'error' => array('exists' => false, 'error' => true),
+                                'articleOfTheDay' => $articleOfTheDay
+                            )
+                        );
+                    }
+
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                 } else {
-                    $this->dateExists($em, new \DateTime($data['custom_date']));
+                    if ($date) {
+                        return $this->container->get('templating')->renderResponse(
+                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+                            array(
+                                'article' => $article,
+                                'form' => $form->createView(),
+                                'status' => false,
+                                'error' => array('exists' => false, 'error' => true),
+                            )
+                        );
+                    }
+
                     $articleOfTheDay = new ArticleOfTheDay();
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setArticle($article);
