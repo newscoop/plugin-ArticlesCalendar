@@ -1,0 +1,6 @@
+firstDay: 1
+showDayNames: true
+navigation: true
+latestMonth: "current"
+imageWidth: "140px"
+view: "month" #can be also "widget"

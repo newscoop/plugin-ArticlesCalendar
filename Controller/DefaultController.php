@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay;
 use Newscoop\ArticlesCalendarBundle\Form\Type\ArticleOfTheDayType;
+use Symfony\Component\Yaml\Parser;
 
 class DefaultController extends Controller
 {
@@ -25,10 +26,35 @@ class DefaultController extends Controller
     */
     public function widgetAction(Request $request)
     {  
-        $date = $request->get('date', date('Y/m/d'));
+
+        $em = $this->container->get('em');
+        $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
+            'is_active' => true
+        ));
+
+        if ($settings) {
+            $view = $settings->getView();
+            $firstDay = $settings->getFirstDay();
+            $navigation = $settings->getNavigation();
+            $showDayNames = $settings->getShowDayNames();
+            $imageWidth = $settings->getImageWidth();
+            $latestMonth = 'current';
+            $date = date('Y/m/d');
+        }
+        
+        if (!$settings) {
+            $view = $request->get('view', 'month');
+            $latestMonth = $request->get('latestMonth', null);
+            $firstDay = $request->get('firstDay', 1);
+            $navigation = $request->get('navigation', 'true');
+            $showDayNames = $request->get('showDayNames');
+            $imageWidth = 140;
+            $date = $request->get('date', date('Y/m/d'));
+        }
+
         $date = explode('/', $date);
         $today = explode('/', date('Y/m/d'));
-        $view = $request->get('view', 'month');
+        $view = 'month';
 
         if (isset($date[0])) {
             $year = $date[0];
@@ -44,7 +70,9 @@ class DefaultController extends Controller
 
         $now = new \DateTime("$today[0]-$today[1]");
 
-        $earliestMonth = $request->get('earliestMonth');
+        $datetime = new \DateTime();
+        $datetime->modify('-12 months');
+        $earliestMonth = $datetime->format('Y/m');
         if (isset($earliestMonth) && $earliestMonth == 'current') {
             $earliestMonth = $today;
         } else if (isset($earliestMonth)) {
@@ -79,11 +107,12 @@ class DefaultController extends Controller
             'month' => $month,
             'day' => $day,
             'defaultView' => $view,
-            'firstDay' => $request->get('firstDay', 1),
-            'nav' => $request->get('navigation', 'true'),
-            'dayNames' => $request->get('showDayNames'),
+            'firstDay' => $firstDay,
+            'nav' => $navigation,
+            'dayNames' => $showDayNames,
             'earliestMonth' => $earliestMonth,
             'latestMonth' => $latestMonth,
+            'image_width' => $imageWidth,
         );
     }
 
@@ -94,6 +123,7 @@ class DefaultController extends Controller
     {   
         $response = new Response();
         $datetime = new \DateTime(date('Y-m-d h').':00:00');
+        $datetime->modify('+6 hour');
         $response->setLastModified($datetime);
         $response->setPublic();
 
@@ -157,7 +187,6 @@ class DefaultController extends Controller
         $status = false;
         $exists = false;
         $error = false;
-        $start = false;
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);

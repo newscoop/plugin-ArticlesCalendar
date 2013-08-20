@@ -1,0 +1,80 @@
+{% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
+
+{% block admin_title %}Article of the day Calendar Plugin{% endblock %}
+{% block admin_page_title_content %}Settings{% endblock %}
+
+{% block admin_stylesheets %}{% endblock %}
+{% block admin_scripts %}{% endblock %}
+
+{% block admin_content %}
+<form id="confForm" action="{{ path('newscoop_articlescalendar_admin_admin') }}" method="post" {{ form_enctype(form) }} >
+        <table id="step1" border="0" cellspacing="0" cellpadding="0" class="box_table">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="alert error"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">   
+                        {{ form_label(form.firstDay) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">
+                        {{ form_widget(form.firstDay, {'attr' : {'class' : 'input_text'}}) }}
+                    </td>
+                </tr>
+                 <tr>
+                    <td align="left">
+                        {{ form_label(form.imageWidth) }}    
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">
+                        {{ form_widget(form.imageWidth, {'attr' : {'class' : 'input_text'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        {{ form_label(form.view) }}    
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">
+                        {{ form_widget(form.view, {'attr' : {'class' : 'input_select'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        {{ form_label(form.showDayNames) }} 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form_widget(form.showDayNames, {'attr' : {'class' : 'input_check'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        {{ form_label(form.navigation) }}    
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">
+                        {{ form_widget(form.navigation, {'attr' : {'class' : 'input_check'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="right" style="padding-top: 10px;">
+                        <input type="submit" id="next" value="Save" class="save-button">
+                    </td>
+                </tr>
+                {{ form_rest(form) }}
+            </tbody>
+        </table>
+    </form>
+{% endblock %}
