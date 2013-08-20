@@ -157,6 +157,7 @@ class DefaultController extends Controller
         $status = false;
         $exists = false;
         $error = false;
+        $start = false;
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -196,23 +197,24 @@ class DefaultController extends Controller
                 }
 
                 if ($articleOfTheDay) {
-                    $status = true;
-
-                    if ($articleOfTheDay->getIsActive() == false) {
-                        
+                    
+                    if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
+                        $exists = true;
                         $articleOfTheDay->setIsActive(true);
                         $em->flush();
 
                         return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
-
-                    if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
-                        $exists = true;
+                    
+                    if (!$articleOfTheDay->getIsActive() && $date) {
+                        $exists = false;
+                        $error = true;
+                        $status = false;
 
                         return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
-            
-                    if ($date) {
+
+                    if ($articleOfTheDay->getIsActive() && $date) {
                         $exists = false;
                         $error = true;
 
@@ -220,10 +222,11 @@ class DefaultController extends Controller
                     }
 
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
+                    $articleOfTheDay->setIsActive(true);
                 } else {
+                    $status = true;
                     if ($date) {
                         $status = false;
-                        $exists = false;
                         $error = true;
 
                         return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
@@ -239,7 +242,7 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-
+        
         return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
     }
 
