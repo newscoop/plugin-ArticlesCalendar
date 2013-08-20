@@ -36,7 +36,17 @@ class AdminController extends Controller
             $settings = new Settings();
         }
 
-        $form = $this->createForm('settingsform', $settings);
+        $form = $this->container->get('form.factory')->create(new SettingsType(), array(
+            'firstDay' => $settings->getFirstDay(),
+            'showDayNames' => $settings->getShowDayNames(),
+            'navigation' => $settings->getNavigation(),
+            'imageWidth' => $settings->getImageWidth(),
+            'imageHeight' => $settings->getImageHeight(),
+            'rendition' => $settings->getRendition(),
+            'view' => $settings->getView(),
+            'styles' => $settings->getStyles(),
+        ), array());
+
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
@@ -49,7 +59,27 @@ class AdminController extends Controller
 
         return array(
             'form' => $form->createView(),
+            'styles' => $settings->getStyles(),
         );
     }
 
+    /**
+    * @Route("/admin/articles-calendar/save-css")
+    */
+    public function savecssAction(Request $request)
+    {    
+        try {
+            $em = $this->container->get('em');
+            $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
+                'is_active' => true
+            ));
+
+            $settings->setStyles($request->get('styles'));
+            $em->flush();
+        } catch (\Exception $e) {
+            return new Response(json_encode(array('status' => false)));
+        }
+
+        return new Response(json_encode(array('status' => true)));
+    }
 }

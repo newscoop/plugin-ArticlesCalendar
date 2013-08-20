@@ -38,6 +38,7 @@ class DefaultController extends Controller
             $showDayNames = $settings->getShowDayNames();
             $imageWidth = $settings->getImageWidth();
             $imageHeight = $settings->getImageHeight();
+            $styles = $settings->getStyles();
             $latestMonth = 'current';
             $date = date('Y/m/d');
         }
@@ -50,6 +51,7 @@ class DefaultController extends Controller
             $showDayNames = $request->get('showDayNames');
             $imageWidth = 140;
             $imageHeight = 94;
+            $styles = '';
             $date = $request->get('date', date('Y/m/d'));
         }
 
@@ -115,6 +117,7 @@ class DefaultController extends Controller
             'latestMonth' => $latestMonth,
             'image_width' => $imageWidth,
             'image_height' => $imageHeight,
+            'styles' => $styles,
         );
     }
 

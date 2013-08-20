@@ -69,6 +69,12 @@ class Settings
     private $view;
 
     /**
+     * @ORM\Column(type="text", name="styles", nullable=true)
+     * @var text
+     */
+    private $styles;
+
+    /**
      * @ORM\Column(type="datetime", name="created_at")
      * @var string
      */
@@ -252,6 +258,29 @@ class Settings
     public function setView($view)
     {
         $this->view = $view;
+        
+        return $this;
+    }
+
+    /**
+     * Get styles
+     *
+     * @return text
+     */
+    public function getStyles()
+    {
+        return $this->styles;
+    }
+
+    /**
+     * Set styles
+     *
+     * @param  text $styles
+     * @return text
+     */
+    public function setStyles($styles)
+    {
+        $this->styles = $styles;
         
         return $this;
     }
