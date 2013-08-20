@@ -13,8 +13,17 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class SettingsType extends AbstractType
 {
+
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $renditions = \Zend_Registry::get('container')->getService('image.rendition')->getRenditions();
+
+        $renditionsArray = array();
+        foreach ($renditions as $rendition) {
+            $renditionsArray[$rendition->getName()] = $rendition->getName();
+        }
+
         $builder
         ->add('firstDay', 'integer', array(
             'label' => 'First day',
@@ -32,8 +41,17 @@ class SettingsType extends AbstractType
         ))
         ->add('imageWidth', 'integer', array(
             'label' => 'Image width (in pixels)',
-            'attr' => array('min'=>'1'),
-            'error_bubbling' => true,
+            'attr' => array('min'=>'0'),
+            'required' => false
+        ))
+        ->add('imageHeight', 'integer', array(
+            'label' => 'Image height (in pixels)',
+            'attr' => array('min'=>'0'),
+            'required' => false
+        ))
+        ->add('rendition', 'choice', array(
+            'choices' => $renditionsArray,
+            'label' => 'Rendition type',
             'required' => true
         ))
         ->add('view', 'choice', array(

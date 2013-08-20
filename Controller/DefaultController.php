@@ -26,7 +26,6 @@ class DefaultController extends Controller
     */
     public function widgetAction(Request $request)
     {  
-
         $em = $this->container->get('em');
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
@@ -38,6 +37,7 @@ class DefaultController extends Controller
             $navigation = $settings->getNavigation();
             $showDayNames = $settings->getShowDayNames();
             $imageWidth = $settings->getImageWidth();
+            $imageHeight = $settings->getImageHeight();
             $latestMonth = 'current';
             $date = date('Y/m/d');
         }
@@ -49,6 +49,7 @@ class DefaultController extends Controller
             $navigation = $request->get('navigation', 'true');
             $showDayNames = $request->get('showDayNames');
             $imageWidth = 140;
+            $imageHeight = 94;
             $date = $request->get('date', date('Y/m/d'));
         }
 
@@ -113,6 +114,7 @@ class DefaultController extends Controller
             'earliestMonth' => $earliestMonth,
             'latestMonth' => $latestMonth,
             'image_width' => $imageWidth,
+            'image_height' => $imageHeight,
         );
     }
 
@@ -134,7 +136,24 @@ class DefaultController extends Controller
         $em = $this->container->get('em');
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
-        $imageWidth = $request->get('image_width', 140);
+
+
+        $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
+            'is_active' => true
+        ));
+
+        if ($settings) {
+            $renditionName = $settings->getRendition();
+            $imageHeight = $settings->getImageHeight();
+            $imageWidth = $settings->getImageWidth();
+
+        }
+
+        if (!$settings) {
+            $renditionName = 'issuethumb';
+            $imageWidth = $request->get('image_width', 140);
+            $imageHeight = $request->get('image_height', 94);
+        }
 
         $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
@@ -147,7 +166,7 @@ class DefaultController extends Controller
         foreach ($articlesOfTheDay as $dayArticle) {
             $element = array();
             $articleNumber = $dayArticle->getArticle()->getNumber();
-            $image = $this->container->get('image.rendition')->getArticleRenditionImage($articleNumber, 'issuethumb', 140, 94);
+            $image = $this->container->get('image.rendition')->getArticleRenditionImage($articleNumber, $renditionName, $imageWidth, $imageHeight);
 
             $element['title'] = $dayArticle->getArticle()->getTitle();
             if (isset($image)) {

@@ -25,7 +25,6 @@ class AdminController extends Controller
     */
     public function adminAction(Request $request)
     {  
-
         $em = $this->container->get('em');
         $insert = false;
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(

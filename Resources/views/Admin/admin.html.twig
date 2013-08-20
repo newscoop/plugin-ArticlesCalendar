@@ -25,14 +25,14 @@
                         {{ form_widget(form.firstDay, {'attr' : {'class' : 'input_text'}}) }}
                     </td>
                 </tr>
-                 <tr>
-                    <td align="left">
-                        {{ form_label(form.imageWidth) }}    
+                <tr>
+                    <td align="left" valign="top">
+                        {{ form_label(form.rendition) }}
                     </td>
                 </tr>
                 <tr>
                     <td align="left" valign="top">
-                        {{ form_widget(form.imageWidth, {'attr' : {'class' : 'input_text'}}) }}
+                        {{ form_widget(form.rendition , {'attr' : {'class' : 'input_select'}}) }}
                     </td>
                 </tr>
                 <tr>
@@ -63,6 +63,31 @@
                 <tr>
                     <td align="left" valign="top">
                         {{ form_widget(form.navigation, {'attr' : {'class' : 'input_check'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        <strong>Optional:</strong>    
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        {{ form_label(form.imageWidth) }}    
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">
+                        {{ form_widget(form.imageWidth, {'attr' : {'class' : 'input_text'}}) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left">
+                        {{ form_label(form.imageHeight) }}    
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" valign="top">
+                        {{ form_widget(form.imageHeight, {'attr' : {'class' : 'input_text'}}) }}
                     </td>
                 </tr>
                 <tr>

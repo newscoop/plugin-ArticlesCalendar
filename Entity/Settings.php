@@ -28,7 +28,7 @@ class Settings
 
     /**
      * @ORM\Column(type="integer", name="firstDay")
-     * @var string
+     * @var int
      */
     private $firstDay;
 
@@ -45,10 +45,22 @@ class Settings
     private $navigation;
 
     /**
-     * @ORM\Column(type="string", name="imageWidth")
-     * @var string
+     * @ORM\Column(type="integer", name="imageWidth", nullable=true)
+     * @var int
      */
     private $imageWidth;
+
+    /**
+     * @ORM\Column(type="integer", name="imageHeight", nullable=true)
+     * @var int
+     */
+    private $imageHeight;
+
+    /**
+     * @ORM\Column(type="string", name="rendition")
+     * @var string
+     */
+    private $rendition;
 
     /**
      * @ORM\Column(type="string", name="view")
@@ -155,7 +167,7 @@ class Settings
     /**
      * Get imageWidth
      *
-     * @return string
+     * @return int
      */
     public function getImageWidth()
     {
@@ -165,12 +177,58 @@ class Settings
     /**
      * Set imageWidth
      *
-     * @param  string $imageWidth
-     * @return string
+     * @param  int $imageWidth
+     * @return int
      */
     public function setImageWidth($imageWidth)
     {
         $this->imageWidth = $imageWidth;
+        
+        return $this;
+    }
+
+    /**
+     * Get imageHeight
+     *
+     * @return int
+     */
+    public function getImageHeight()
+    {
+        return $this->imageHeight;
+    }
+
+    /**
+     * Set imageHeight
+     *
+     * @param  int $imageHeight
+     * @return int
+     */
+    public function setImageHeight($imageHeight)
+    {
+        $this->imageHeight = $imageHeight;
+        
+        return $this;
+    }
+
+    /**
+     * Get rendition
+     *
+     * @return string
+     */
+    public function getRendition()
+    {
+        return $this->rendition;
+    }
+
+    /**
+     * Set rendition
+     *
+     * @param  string $rendition
+     * @return string
+     */
+    public function setRendition($rendition)
+    {
+        $this->rendition = $rendition;
         
         return $this;
     }
