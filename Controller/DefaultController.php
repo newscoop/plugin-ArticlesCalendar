@@ -98,6 +98,36 @@ class DefaultController extends Controller
             $latestMonth = null;
         }
 
+        $locale = $request->getLocale();
+
+        $dateFormatter['month'] = \IntlDateFormatter::create(
+        $locale,
+        \IntlDateFormatter::NONE,
+        \IntlDateFormatter::NONE,
+        \date_default_timezone_get(),
+        \IntlDateFormatter::GREGORIAN,
+        'MMMM'
+        );
+
+        $dateFormatter['dayName'] = \IntlDateFormatter::create(
+          $locale,
+          \IntlDateFormatter::NONE,
+          \IntlDateFormatter::NONE,
+          \date_default_timezone_get(),
+          \IntlDateFormatter::GREGORIAN,
+          'EEEE'
+        );
+
+        $months = array();
+        $days = array();
+        for ($i=1; $i <= 12; $i++) {
+            $months[] = $dateFormatter['month']->format(new \DateTime($year."-".$i));
+        }
+
+        for ($i=0; $i <= 6; $i++) {
+            $days[] = $dateFormatter['dayName']->format(strtotime("Sunday +$i days"));
+        }
+
         return array(
             'randomInt' => md5(uniqid('', true)),
             'today' => explode('/', date('Y/m/d')),
@@ -112,7 +142,9 @@ class DefaultController extends Controller
             'latestMonth' => $latestMonth,
             'image_width' => $imageWidth,
             'image_height' => $imageHeight,
-            'styles' => $styles, 
+            'styles' => $styles,
+            'months' => $months,
+            'days' => $days,
         );
     }
 

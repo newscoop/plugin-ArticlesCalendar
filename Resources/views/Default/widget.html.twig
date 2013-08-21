@@ -55,18 +55,14 @@ $("#wobs_calendar_{{ randomInt }}").wobscalendar({
     'earliestMonth': {% if earliestMonth %} new Date('{{ earliestMonth[0] }}', '{{ earliestMonth[1]-1 }}') {% else %} undefined {% endif %},
     'latestMonth': {% if latestMonth %} new Date('{{ latestMonth[0] }}', '{{ latestMonth[1]-1 }}') {% else %} undefined {% endif %},
     'monthNames': [
-        '{{getGS('January')}}', 
-        '{{getGS('February')}}', 
-        '{{getGS('March')}}', 
-        '{{getGS('April')}}',
-        '{{getGS('May')}}', 
-        '{{getGS('June')}}', 
-        '{{getGS('July')}}', 
-        '{{getGS('August')}}',
-        '{{getGS('September')}}', 
-        '{{getGS('October')}}', 
-        '{{getGS('November')}}', 
-        '{{getGS('December')}}'
+        {% for month in months %}
+            '{{ month }}',
+        {% endfor %}
+    ],
+    'dayNames': [
+        {% for day in days %}
+            '{{ day }}',
+        {% endfor %}
     ]
 });
 </script>
