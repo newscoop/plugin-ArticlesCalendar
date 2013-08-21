@@ -60,6 +60,7 @@ class AdminController extends Controller
         return array(
             'form' => $form->createView(),
             'styles' => $settings->getStyles(),
+            'lastModified' => $settings->getCreatedAt(),
         );
     }
 
@@ -75,6 +76,7 @@ class AdminController extends Controller
             ));
 
             $settings->setStyles($request->get('styles'));
+            $settings->setCreatedAt(new \Datetime($request->get('lastModified')));
             $em->flush();
         } catch (\Exception $e) {
             return new Response(json_encode(array('status' => false)));
