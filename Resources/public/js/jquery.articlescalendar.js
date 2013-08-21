@@ -243,16 +243,16 @@
             //show the names of the days of the week on the calendar
             if (options.showDayNames) {
 
-                /*
+                $li = $('<li/>');
+                $top = $('.top');
+                $ultop = $('<ul/>', {
+                    'class': 'calendar-day-names-ul'
+                });
+                $top.after($ultop);
                 for (i = 0; i < 7; i++) {
-                    th = $('<th/>');
-                    
                     dayIndex = (options.firstDay + i) % 7;
-                    th.append(options.dayNames[dayIndex]);
-                    
-                    thead.find('tr').append(th);
+                    $ultop.append($li.clone().append('<center>'+options.dayNames[dayIndex]+'</center>'));
                 }
-                */
             }
             
             for (i = 0; i < 42; i++) {

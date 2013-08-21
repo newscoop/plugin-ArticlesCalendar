@@ -74,3 +74,15 @@
 .calendar-list li a:hover span,
 .calendar-list li.inactive a span {background:none;}
 .calendar-list li a:hover h5 {display:block;}
+.calendar-day-names-ul {margin: 0;}
+.calendar-day-names-ul li {
+    margin: 0; 
+    list-style-type: none;
+    width: 140px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: #000;
+    font-weight: bold;
+    line-height: 30px;
+    float: left;
+}
