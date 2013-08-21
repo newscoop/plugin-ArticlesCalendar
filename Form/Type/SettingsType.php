@@ -1,6 +1,6 @@
 <?php
 /**
- * @package Newscoop\PaywallBundle
+ * @package Newscoop\ArticlesCalendarBundle
  * @author Rafał Muszyński <rafal.muszynski@sourcefabric.org>
  * @copyright 2013 Sourcefabric o.p.s.
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
@@ -21,7 +21,7 @@ class SettingsType extends AbstractType
 
         $renditionsArray = array();
         foreach ($renditions as $rendition) {
-            $renditionsArray[$rendition->getName()] = $rendition->getName();
+            $renditionsArray[$rendition->getName()] = $rendition->getName().' ('.$rendition->getWidth().'x'.$rendition->getHeight().')';
         }
 
         $builder
@@ -52,15 +52,6 @@ class SettingsType extends AbstractType
         ->add('rendition', 'choice', array(
             'choices' => $renditionsArray,
             'label' => 'Rendition type',
-            'required' => true
-        ))
-        ->add('view', 'choice', array(
-            'label' => 'View',
-            'choices'   => array(
-                'month'   => 'Month',
-                'widget'   => 'Widget',
-            ),
-            'error_bubbling' => true,
             'required' => true
         ));
     }

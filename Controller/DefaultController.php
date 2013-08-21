@@ -32,18 +32,14 @@ class DefaultController extends Controller
         ));
 
         if ($settings) {
-            $view = $settings->getView();
             $firstDay = $settings->getFirstDay();
             $navigation = $settings->getNavigation();
             $showDayNames = $settings->getShowDayNames();
             $imageWidth = $settings->getImageWidth();
             $imageHeight = $settings->getImageHeight();
             $styles = $settings->getStyles();
-            $latestMonth = 'current';
             $date = date('Y/m/d');
         } else {
-            $view = $request->get('view', 'month');
-            $latestMonth = $request->get('latestMonth', null);
             $firstDay = $request->get('firstDay', 1);
             $navigation = $request->get('navigation', 'true');
             $showDayNames = $request->get('showDayNames');
@@ -56,6 +52,7 @@ class DefaultController extends Controller
         $date = explode('/', $date);
         $today = explode('/', date('Y/m/d'));
         $view = 'month';
+        $latestMonth = 'current';
 
         if (isset($date[0])) {
             $year = $date[0];
@@ -168,11 +165,11 @@ class DefaultController extends Controller
             ->getResult();
 
         $results = array();
-
         foreach ($articlesOfTheDay as $dayArticle) {
             $element = array();
             $articleNumber = $dayArticle->getArticle()->getNumber();
-            $image = $this->container->get('image.rendition')->getArticleRenditionImage($articleNumber, $renditionName, $imageWidth, $imageHeight);
+            $image = $this->container->get('image.rendition')
+                ->getArticleRenditionImage($articleNumber, $renditionName, $imageWidth ? $imageWidth : null, $imageHeight ? $imageHeight : null);
 
             $element['title'] = $dayArticle->getArticle()->getTitle();
             if (isset($image)) {

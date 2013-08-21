@@ -43,17 +43,24 @@ class AdminController extends Controller
             'imageWidth' => $settings->getImageWidth(),
             'imageHeight' => $settings->getImageHeight(),
             'rendition' => $settings->getRendition(),
-            'view' => $settings->getView(),
-            'styles' => $settings->getStyles(),
         ), array());
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
+                $data = $form->getData();
+               // var_dump('expression');die;
                 if ($insert) {
                     $em->persist($settings);
                 }
+                $settings->setFirstDay($data['firstDay']);
+                $settings->setShowDayNames($data['showDayNames']);
+                $settings->setNavigation($data['navigation']);
+                $settings->setImageWidth($data['imageWidth']);
+                $settings->setImageHeight($data['imageHeight']);
+                $settings->setRendition($data['rendition']);
                 $em->flush();
+                //die;
             }
         }
 

@@ -45,28 +45,22 @@ class Settings
     private $navigation;
 
     /**
-     * @ORM\Column(type="integer", name="imageWidth", nullable=true)
+     * @ORM\Column(type="integer", name="imageWidth")
      * @var int
      */
-    private $imageWidth;
+    private $imageWidth = 0;
 
     /**
-     * @ORM\Column(type="integer", name="imageHeight", nullable=true)
+     * @ORM\Column(type="integer", name="imageHeight")
      * @var int
      */
-    private $imageHeight;
+    private $imageHeight = 0;
 
     /**
      * @ORM\Column(type="string", name="rendition")
      * @var string
      */
     private $rendition;
-
-    /**
-     * @ORM\Column(type="string", name="view")
-     * @var string
-     */
-    private $view;
 
     /**
      * @ORM\Column(type="text", name="styles", nullable=true)
@@ -235,29 +229,6 @@ class Settings
     public function setRendition($rendition)
     {
         $this->rendition = $rendition;
-        
-        return $this;
-    }
-
-    /**
-     * Get view
-     *
-     * @return string
-     */
-    public function getView()
-    {
-        return $this->view;
-    }
-
-    /**
-     * Set view
-     *
-     * @param  string $view
-     * @return string
-     */
-    public function setView($view)
-    {
-        $this->view = $view;
         
         return $this;
     }
