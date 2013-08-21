@@ -41,9 +41,7 @@ class DefaultController extends Controller
             $styles = $settings->getStyles();
             $latestMonth = 'current';
             $date = date('Y/m/d');
-        }
-        
-        if (!$settings) {
+        } else {
             $view = $request->get('view', 'month');
             $latestMonth = $request->get('latestMonth', null);
             $firstDay = $request->get('firstDay', 1);
@@ -117,7 +115,7 @@ class DefaultController extends Controller
             'latestMonth' => $latestMonth,
             'image_width' => $imageWidth,
             'image_height' => $imageHeight,
-            'styles' => $styles,
+            'styles' => $styles, 
         );
     }
 
@@ -126,20 +124,28 @@ class DefaultController extends Controller
     */
     public function getArticlesOfTheDayAction(Request $request)
     {   
+        $em = $this->container->get('em');
+        $articlesOfTheDayDate = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
+            ->createQueryBuilder('a')
+            ->where('a.is_active = true')
+            ->orderBy('a.created_at', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($articlesOfTheDayDate as $article) {
+            $datesArray['datetime'] = $article->getCreatedAt();
+        }
         $response = new Response();
-        $datetime = new \DateTime(date('Y-m-d h').':00:00');
-        $datetime->modify('+6 hour');
-        $response->setLastModified($datetime);
+        $response->setLastModified(new \DateTime($datesArray['datetime']->format('Y-m-d H:i:s')));
         $response->setPublic();
 
         if ($response->isNotModified($request)) {
             return $response;
         }
 
-        $em = $this->container->get('em');
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
-
 
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
@@ -149,10 +155,7 @@ class DefaultController extends Controller
             $renditionName = $settings->getRendition();
             $imageHeight = $settings->getImageHeight();
             $imageWidth = $settings->getImageWidth();
-
-        }
-
-        if (!$settings) {
+        } else {
             $renditionName = 'issuethumb';
             $imageWidth = $request->get('image_width', 140);
             $imageHeight = $request->get('image_height', 94);
@@ -273,6 +276,7 @@ class DefaultController extends Controller
                     }
 
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
+                    $articleOfTheDay->setCreatedAt(new \DateTime());
                     $articleOfTheDay->setIsActive(true);
                 } else {
                     $status = true;
