@@ -1,0 +1,163 @@
+{% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
+
+{% block admin_title %}Article of the day Calendar Plugin{% endblock %}
+{% block admin_page_title_content %}Settings{% endblock %}
+
+{% block admin_stylesheets %}
+<link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/css/codemirror.css">
+<style>
+.CodeMirror {background: none;margin: 2px; width: 840px; height: 524px;border: 1px solid #C0C0C0;}
+#settingTable {float: left; margin-top: 0px; margin-right: 25px;}
+.input_select, .input_text {width: 250px;}
+.last {float: right;font-size: 10px;margin-right: 5px;}
+</style>
+{% endblock %}
+{% block admin_scripts %}
+<script type="text/javascript" src="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/js/codemirror.js"></script>
+<script type="text/javascript" src="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/js/css.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#save').live('click', function(e){
+        e.preventDefault();
+        var format = new Date();
+        var d = format.getDate();
+        var m =  format.getMonth();
+        m += 1;
+        var h = format.getHours();
+        var min = format.getMinutes();
+        var s = format.getSeconds();
+        var y = format.getFullYear();
+        var time = y + "-" + (m <= 9 ? "0" + m : m)+ "-" + (d <= 9 ? "0" + d : d) + " " + (h <= 9 ? "0" + h : h) + ":" + (min <= 9 ? "0" + min : min) + ":" + (s <= 9 ? "0" + s : s);
+        $.ajax({
+            type: "POST",
+            url: "{{ path('newscoop_articlescalendar_admin_savecss') }}",
+            data: {'styles': editor.getValue(), 'lastModified': time},
+            dataType: "json",
+            success: function(msg){
+                if (msg.status) {
+                    flashMessage('Successfully saved.');
+                    $('#time').empty();
+                    $('#time').append(time);
+                } else {
+                    flashMessage('Could not save stylesheet.', 'error');
+                }
+            }
+        });
+    })
+});
+</script>
+{% endblock %}
+
+{% block admin_content %}
+<form action="{{ path('newscoop_articlescalendar_admin_admin') }}" method="post" {{ form_enctype(form) }} >
+    <table id="settingTable" border="0" cellspacing="0" cellpadding="0" class="box_table">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="alert error">{{ form_errors(form) }}</div>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">   
+                    {{ form_label(form.firstDay) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_widget(form.firstDay, {'attr' : {'class' : 'input_text'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_label(form.rendition) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_widget(form.rendition , {'attr' : {'class' : 'input_select'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    {{ form_label(form.showDayNames) }} 
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form_widget(form.showDayNames, {'attr' : {'class' : 'input_check'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    {{ form_label(form.navigation) }}    
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_widget(form.navigation, {'attr' : {'class' : 'input_check'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <strong>Optional:</strong>    
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    {{ form_label(form.imageWidth) }}    
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_widget(form.imageWidth, {'attr' : {'class' : 'input_text'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    {{ form_label(form.imageHeight) }}    
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_widget(form.imageHeight, {'attr' : {'class' : 'input_text'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><hr></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right" style="padding-top: 10px;">
+                    <input type="submit" value="Save" class="save-button">
+                </td>
+            </tr>
+            {{ form_rest(form) }}
+        </tbody>
+    </table>
+</form>
+<table border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <tbody>
+        <tr>
+            <td>
+                <div class="actions"><string>Add custom CSS to customize Calendar widget:</string><span class="last">Last modified: <span id="time">{{ lastModified|date("Y-m-d H:i:s")}}</span></span></div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <textarea id="textarea" name="textarea">{{ styles }}</textarea>
+                <script>
+                    var editor = CodeMirror.fromTextArea(document.getElementById("textarea"), {
+                        lineNumbers: true,
+                        matchBrackets: true,
+                        mode: "text/css"
+                    });
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="right" style="padding-top: 10px;">
+                <input type="submit" id="save" value="Save" class="save-button">
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}

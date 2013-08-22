@@ -2,6 +2,7 @@
 /**
  * @package Newscoop\ArticlesCalendarBundle
  * @author Paweł Mikołajczuk <pawel.mikolajczuk@sourcefabric.org>
+ * @author Rafał Muszyński <rafal.muszynski@sourcefabric.org>
  * @copyright 2013 Sourcefabric o.p.s.
  * @license http://www.gnu.org/licenses/gpl-3.0.txt
  */
@@ -10,6 +11,7 @@ namespace Newscoop\ArticlesCalendarBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Newscoop\EventDispatcher\Events\GenericEvent;
+use Newscoop\ArticlesCalendarBundle\Entity\Settings;
 
 /**
  * Event lifecycle management
@@ -33,6 +35,19 @@ class LifecycleSubscriber implements EventSubscriberInterface
 
         // Generate proxies for entities
         $this->em->getProxyFactory()->generateProxyClasses($this->getClasses(), __DIR__ . '/../../../../library/Proxy');
+
+        $settings = new Settings();
+        $settings->setFirstDay(1);
+        $settings->setNavigation(true);
+        $settings->setShowDayNames(true);
+        $settings->setRendition('issuethumb');
+        $settings->setImageWidth(0);
+        $settings->setImageHeight(0);
+        $settings->setStyles('/* Some custom CSS */');
+        $settings->setIsActive(true);
+        $settings->setCreatedAt(new \DateTime('now'));
+        $this->em->persist($settings);
+        $this->em->flush();
     }
 
     public function update(GenericEvent $event)
@@ -70,7 +85,8 @@ class LifecycleSubscriber implements EventSubscriberInterface
 
     private function getClasses(){
         return array(
-          $this->em->getClassMetadata('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay'),
+            $this->em->getClassMetadata('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay'),
+            $this->em->getClassMetadata('Newscoop\ArticlesCalendarBundle\Entity\Settings'),
         );
     }
 }

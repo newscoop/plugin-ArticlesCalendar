@@ -14,9 +14,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay;
 use Newscoop\ArticlesCalendarBundle\Form\Type\ArticleOfTheDayType;
+use Symfony\Component\Yaml\Parser;
 
 class DefaultController extends Controller
 {
@@ -26,10 +26,23 @@ class DefaultController extends Controller
     */
     public function widgetAction(Request $request)
     {  
+        $em = $this->container->get('em');
+        $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
+            'is_active' => true
+        ));
+
+        $firstDay = $request->get('firstDay', $settings->getFirstDay());
+        $navigation = $request->get('navigation', $settings->getNavigation());
+        $showDayNames = $request->get('showDayNames', $settings->getShowDayNames());
+        $imageWidth = $request->get('image_width', $settings->getImageWidth());
+        $imageHeight = $request->get('image_height', $settings->getImageHeight());
         $date = $request->get('date', date('Y/m/d'));
+        $styles = $settings->getStyles();
+
         $date = explode('/', $date);
         $today = explode('/', date('Y/m/d'));
-        $view = $request->get('view', 'month');
+        $view = 'month';
+        $latestMonth = 'current';
 
         if (isset($date[0])) {
             $year = $date[0];
@@ -45,7 +58,9 @@ class DefaultController extends Controller
 
         $now = new \DateTime("$today[0]-$today[1]");
 
-        $earliestMonth = $request->get('earliestMonth');
+        $datetime = new \DateTime();
+        $datetime->modify('-12 months');
+        $earliestMonth = $datetime->format('Y/m');
         if (isset($earliestMonth) && $earliestMonth == 'current') {
             $earliestMonth = $today;
         } else if (isset($earliestMonth)) {
@@ -73,6 +88,36 @@ class DefaultController extends Controller
             $latestMonth = null;
         }
 
+        $locale = $request->getPreferredLanguage();
+
+        $dateFormatter['month'] = \IntlDateFormatter::create(
+        $locale,
+        \IntlDateFormatter::NONE,
+        \IntlDateFormatter::NONE,
+        \date_default_timezone_get(),
+        \IntlDateFormatter::GREGORIAN,
+        'MMMM'
+        );
+
+        $dateFormatter['dayName'] = \IntlDateFormatter::create(
+          $locale,
+          \IntlDateFormatter::NONE,
+          \IntlDateFormatter::NONE,
+          \date_default_timezone_get(),
+          \IntlDateFormatter::GREGORIAN,
+          'EEEE'
+        );
+
+        $months = array();
+        $days = array();
+        for ($i=1; $i <= 12; $i++) {
+            $months[] = $dateFormatter['month']->format(new \DateTime($year."-".$i));
+        }
+
+        for ($i=0; $i <= 6; $i++) {
+            $days[] = $dateFormatter['dayName']->format(strtotime("Sunday +$i days"));
+        }
+
         return array(
             'randomInt' => md5(uniqid('', true)),
             'today' => explode('/', date('Y/m/d')),
@@ -80,11 +125,16 @@ class DefaultController extends Controller
             'month' => $month,
             'day' => $day,
             'defaultView' => $view,
-            'firstDay' => $request->get('firstDay', 1),
-            'nav' => $request->get('navigation', 'true'),
-            'dayNames' => $request->get('showDayNames'),
+            'firstDay' => $firstDay,
+            'nav' => $navigation,
+            'dayNames' => $showDayNames,
             'earliestMonth' => $earliestMonth,
             'latestMonth' => $latestMonth,
+            'image_width' => $imageWidth,
+            'image_height' => $imageHeight,
+            'styles' => $styles,
+            'months' => $months,
+            'days' => $days,
         );
     }
 
@@ -93,20 +143,37 @@ class DefaultController extends Controller
     */
     public function getArticlesOfTheDayAction(Request $request)
     {   
+        $em = $this->container->get('em');
+        $articlesOfTheDayDate = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
+            ->createQueryBuilder('a')
+            ->where('a.is_active = true')
+            ->orderBy('a.created_at', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($articlesOfTheDayDate as $article) {
+            $datesArray['datetime'] = $article->getCreatedAt();
+        }
         $response = new Response();
-        $datetime = new \DateTime(date('Y-m-d h').':00:00');
-        $response->setLastModified($datetime);
+        $response->setLastModified(new \DateTime($datesArray['datetime']->format('Y-m-d H:i:s')));
         $response->setPublic();
 
         if ($response->isNotModified($request)) {
             return $response;
         }
 
-        $em = $this->container->get('em');
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
-        $imageWidth = $request->get('image_width', 140);
 
+        $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
+            'is_active' => true
+        ));
+
+        $renditionName = $request->get('renditionName', $settings->getRendition());
+        $imageWidth = $request->get('image_width', $settings->getImageWidth());
+        $imageHeight = $request->get('image_height', $settings->getImageHeight());
+        
         $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
             ->where('a.is_active = true')
@@ -114,11 +181,11 @@ class DefaultController extends Controller
             ->getResult();
 
         $results = array();
-
         foreach ($articlesOfTheDay as $dayArticle) {
             $element = array();
             $articleNumber = $dayArticle->getArticle()->getNumber();
-            $image = $this->container->get('image.rendition')->getArticleRenditionImage($articleNumber, 'issuethumb', 140, 94);
+            $image = $this->container->get('image.rendition')
+                ->getArticleRenditionImage($articleNumber, $renditionName, $imageWidth ? $imageWidth : null, $imageHeight ? $imageHeight : null);
 
             $element['title'] = $dayArticle->getArticle()->getTitle();
             if (isset($image)) {
@@ -156,6 +223,8 @@ class DefaultController extends Controller
         $em = $this->container->get('em');
         $form = $this->container->get('form.factory')->create(new ArticleOfTheDayType(), array(), array());
         $status = false;
+        $exists = false;
+        $error = false;
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -187,79 +256,48 @@ class DefaultController extends Controller
 
                 if ($request->get('_route') === "newscoop_articlescalendar_default_unmark") {
 
+                    $status = false;
                     $articleOfTheDay->setIsActive(false);
                     $em->flush();
 
-                    return $this->container->get('templating')->renderResponse(
-                        'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                        array(
-                            'article' => $article,
-                            'form' => $form->createView(),
-                            'status' => false,
-                            'error' => array('exists' => false, 'error' => false),
-                            'articleOfTheDay' => $articleOfTheDay
-                        )
-                    );
+                    return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                 }
 
                 if ($articleOfTheDay) {
-
-                    if ($articleOfTheDay->getIsActive() == false) {
-                        
+                    
+                    if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
+                        $exists = true;
                         $articleOfTheDay->setIsActive(true);
                         $em->flush();
 
-                        return $this->container->get('templating')->renderResponse(
-                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                            array(
-                                'article' => $article,
-                                'form' => $form->createView(),
-                                'status' => $status,
-                                'error' => array('exists' => false, 'error' => false),
-                                'articleOfTheDay' => $articleOfTheDay
-                            )
-                        );
+                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
+                    }
+                    
+                    if (!$articleOfTheDay->getIsActive() && $date) {
+                        $exists = false;
+                        $error = true;
+                        $status = false;
+
+                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
 
-                    if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
-                        return $this->container->get('templating')->renderResponse(
-                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                            array(
-                                'article' => $article,
-                                'form' => $form->createView(),
-                                'status' => $status,
-                                'error' => array('exists' => true, 'error' => false),
-                                'articleOfTheDay' => $articleOfTheDay
-                            )
-                        );
-                    }
-            
-                    if ($date) {
+                    if ($articleOfTheDay->getIsActive() && $date) {
+                        $exists = false;
+                        $error = true;
 
-                        return $this->container->get('templating')->renderResponse(
-                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                            array(
-                                'article' => $article,
-                                'form' => $form->createView(),
-                                'status' => $status,
-                                'error' => array('exists' => false, 'error' => true),
-                                'articleOfTheDay' => $articleOfTheDay
-                            )
-                        );
+                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
 
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
+                    $articleOfTheDay->setCreatedAt(new \DateTime());
+                    $articleOfTheDay->setIsActive(true);
                 } else {
+                    $status = true;
                     if ($date) {
-                        return $this->container->get('templating')->renderResponse(
-                            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
-                            array(
-                                'article' => $article,
-                                'form' => $form->createView(),
-                                'status' => false,
-                                'error' => array('exists' => false, 'error' => true),
-                            )
-                        );
+                        $status = false;
+                        $error = true;
+
+                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
                     }
 
                     $articleOfTheDay = new ArticleOfTheDay();
@@ -272,14 +310,30 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
+        
+        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
+    }
 
-        return $this->container->get('templating')->renderResponse(
-            'NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
+    /**
+     * Returns data for given parameters
+     *
+     * @param entity object               $article         Article
+     * @param Symfony\Component\Form\Form $form            Form
+     * @param bool                        $status          Article of the day status
+     * @param bool                        $exists          Shows message if an article exists
+     * @param bool                        $error           Shows error message
+     * @param entity object               $articleOfTheDay Article of the day
+     *
+     * @return array
+     */
+    private function returnData($article, $form, $status, $exists, $error, $articleOfTheDay) {
+        
+        return $this->container->get('templating')->renderResponse('NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
             array(
                 'article' => $article,
                 'form' => $form->createView(),
                 'status' => $status,
-                'error' => array('exists' => false, 'error' => false),
+                'error' => array('exists' => $exists, 'error' => $error),
                 'articleOfTheDay' => $articleOfTheDay
             )
         );
