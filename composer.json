@@ -2,13 +2,17 @@
     "name": "newscoop/articles-calendar-plugin",
     "description": "Show All \"Articles of the day\" in nice calendar widget",
     "keywords": ["newscoop", "calendar", "cms", "widget"],
-    "version": "0.1",
+    "version": "0.2",
     "type": "newscoop-plugin",
     "license": "GPL-3.0",
     "authors": [
         {
             "name": "Pawel Mikolajczuk",
             "email": "pawel.mikolajczuk@sourcefabric.org"
+        },
+        {
+            "name": "Rafał Muszyński",
+            "email": "rafal.myszynski@sourcefabric.org"
         }
     ],
     "require": {
