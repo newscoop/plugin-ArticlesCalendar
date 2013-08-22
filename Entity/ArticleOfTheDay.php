@@ -45,6 +45,11 @@ class ArticleOfTheDay
      */
     private $articleNumber;
 
+     /**
+     * @ORM\Column(type="string", name="show_in")
+     */
+    private $showIn;
+
     /**
      * @ORM\Column(type="integer", name="article_language_id")
      * @var int
@@ -125,6 +130,28 @@ class ArticleOfTheDay
     public function setArticle($article)
     {
         $this->article = $article;
+        
+        return $this;
+    }
+
+    /**
+     * Get showIn
+     *
+     * @return string
+     */
+    public function getShowIn()
+    {
+        return $this->showIn;
+    }
+
+    /**
+     * Set showIn
+     *
+     * @param string $showIn
+     */
+    public function setShowIn($showIn)
+    {
+        $this->showIn = $showIn;
         
         return $this;
     }

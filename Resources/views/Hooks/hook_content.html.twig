@@ -5,6 +5,7 @@
 <div class="js-articleoftheday-unmark-msg"></div>
 {% if error.exists %}<div class="js-articleoftheday-date-info">You set the same date.</div>{% endif %}
 {% if error.error %}<div class="js-articleoftheday-date-error">Article with chosen date is already set!</div>{% endif %}
+Visible in: 
 <div class="js-articleoftheday-change-date-box {% if status %}js-articleoftheday-change-date-box-hide{% endif %}">
     <form id="js-articleoftheday-changeForm" action="{{ path('newscoop_articlescalendar_default_setarticlesoftheday') }}" method="post" {{ form_enctype(form) }}>
         {{ form_row(form.articleId) }}
@@ -12,6 +13,8 @@
         {{ form_row(form.publicationId) }}
         <h4>Choose date</h4>
         {{ form_widget(form.custom_date) }}
+        <h4>Choose publication where it should be visible:</h4>
+        {{ form_widget(form.showIn) }}
         {{ form_rest(form) }}
         <input type="submit" value="Save" name="articleofthedayform_submit" class="save-button">
     </form>
