@@ -19,7 +19,15 @@
 $(document).ready(function() {
     $('#save').live('click', function(e){
         e.preventDefault();
-        var time = "{{ "now"|date("Y-m-d H:i:s") }}";
+        var format = new Date();
+        var d = format.getDate();
+        var m =  format.getMonth();
+        m += 1;
+        var h = format.getHours();
+        var min = format.getMinutes();
+        var s = format.getSeconds();
+        var y = format.getFullYear();
+        var time = y + "-" + (m <= 9 ? "0" + m : m)+ "-" + (d <= 9 ? "0" + d : d) + " " + (h <= 9 ? "0" + h : h) + ":" + (min <= 9 ? "0" + min : min) + ":" + (s <= 9 ? "0" + s : s);
         $.ajax({
             type: "POST",
             url: "{{ path('newscoop_articlescalendar_admin_savecss') }}",

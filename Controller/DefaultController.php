@@ -31,23 +31,13 @@ class DefaultController extends Controller
             'is_active' => true
         ));
 
-        if ($settings) {
-            $firstDay = $settings->getFirstDay();
-            $navigation = $settings->getNavigation();
-            $showDayNames = $settings->getShowDayNames();
-            $imageWidth = $settings->getImageWidth();
-            $imageHeight = $settings->getImageHeight();
-            $styles = $settings->getStyles();
-            $date = date('Y/m/d');
-        } else {
-            $firstDay = $request->get('firstDay', 1);
-            $navigation = $request->get('navigation', 'true');
-            $showDayNames = $request->get('showDayNames');
-            $imageWidth = 140;
-            $imageHeight = 94;
-            $styles = '';
-            $date = $request->get('date', date('Y/m/d'));
-        }
+        $firstDay = $request->get('firstDay', $settings->getFirstDay());
+        $navigation = $request->get('navigation', $settings->getNavigation());
+        $showDayNames = $request->get('showDayNames', $settings->getShowDayNames());
+        $imageWidth = $request->get('image_width', $settings->getImageWidth());
+        $imageHeight = $request->get('image_height', $settings->getImageHeight());
+        $date = $request->get('date', date('Y/m/d'));
+        $styles = $settings->getStyles();
 
         $date = explode('/', $date);
         $today = explode('/', date('Y/m/d'));
@@ -98,7 +88,7 @@ class DefaultController extends Controller
             $latestMonth = null;
         }
 
-        $locale = $request->getLocale();
+        $locale = $request->getPreferredLanguage();
 
         $dateFormatter['month'] = \IntlDateFormatter::create(
         $locale,
@@ -180,16 +170,10 @@ class DefaultController extends Controller
             'is_active' => true
         ));
 
-        if ($settings) {
-            $renditionName = $settings->getRendition();
-            $imageHeight = $settings->getImageHeight();
-            $imageWidth = $settings->getImageWidth();
-        } else {
-            $renditionName = 'issuethumb';
-            $imageWidth = $request->get('image_width', 140);
-            $imageHeight = $request->get('image_height', 94);
-        }
-
+        $renditionName = $request->get('renditionName', $settings->getRendition());
+        $imageWidth = $request->get('image_width', $settings->getImageWidth());
+        $imageHeight = $request->get('image_height', $settings->getImageHeight());
+        
         $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
             ->where('a.is_active = true')
