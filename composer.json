@@ -12,7 +12,11 @@
         },
         {
             "name": "Rafał Muszyński",
+<<<<<<< HEAD
             "email": "rafal.muszynski@sourcefabric.org"
+=======
+            "email": "rafal.myszynski@sourcefabric.org"
+>>>>>>> 629abc06e162169d426b9c1e99791fcfb4117a00
         }
     ],
     "require": {
