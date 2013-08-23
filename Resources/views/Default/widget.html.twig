@@ -36,7 +36,7 @@ function getArticlesOfTheDay( start, end, callback )
     search_end = formatDate(end);
 
     $.post("{{ Newscoop['WEBSITE_URL'] }}/plugin/articlescalendar/articlesoftheday/get",
-        {"format": "json", "start": search_start, "end": search_end, "image_width": {{ image_width }}, "image_height":{{image_height }}},
+        {"format": "json", "start": search_start, "end": search_end, "image_width": {{ image_width }}, "image_height":{{image_height }} },
         function(data){
             callback(data.articles);
         },

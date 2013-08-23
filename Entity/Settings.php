@@ -63,6 +63,12 @@ class Settings
     private $rendition;
 
     /**
+     * @ORM\Column(type="string", name="publication_numbers")
+     * @var string
+     */
+    private $publicationNumbers;
+
+    /**
      * @ORM\Column(type="text", name="styles", nullable=true)
      * @var text
      */
@@ -229,6 +235,29 @@ class Settings
     public function setRendition($rendition)
     {
         $this->rendition = $rendition;
+        
+        return $this;
+    }
+
+    /**
+     * Get publicationNumbers
+     *
+     * @return string
+     */
+    public function getPublicationNumbers()
+    {
+        return $this->publicationNumbers;
+    }
+
+    /**
+     * Set publicationNumbers
+     *
+     * @param  string $publicationNumbers
+     * @return string
+     */
+    public function setPublicationNumbers($publicationNumbers)
+    {
+        $this->publicationNumbers = $publicationNumbers;
         
         return $this;
     }

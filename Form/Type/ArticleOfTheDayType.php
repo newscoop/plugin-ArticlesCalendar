@@ -15,11 +15,30 @@ class ArticleOfTheDayType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $em = \Zend_Registry::get('container')->getService('em');
+
+        $publications = $em->getRepository('Newscoop\Entity\Publication')
+            ->createQueryBuilder('p')
+            ->getQuery()
+            ->getResult();
+
+        $publicationsArray = array();
+        foreach ($publications as $publication) {
+            $publicationsArray[$publication->getId()] = $publication->getName();
+        }
+       
         $builder
         ->add('articleId', 'hidden', array(
             'required' => true
         ))
         ->add('publicationId', 'hidden', array(
+            'required' => true
+        ))
+        ->add('publicationNumbers', 'choice', array(
+         'choices'   => $publicationsArray,
+            'label' => 'Choose publications:',
+            'error_bubbling' => true,
+            'multiple'  => true,
             'required' => true
         ))
         ->add('articleLanguageId', 'hidden', array(

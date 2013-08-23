@@ -1,17 +1,34 @@
 <div class="article-data" data-article-number="{{ article.getNumber() }}" data-article-language="{{ article.getLanguageId() }}"></div>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#articleofthedayform_publicationNumbers').select2({ placeholder: "Choose..."});
+});
+</script>
 <div class="js-articleoftheday-status">Status: {% if status %}<span class="js-articleoftheday-status-yes">Yes</span>{% else %}<span class="js-articleoftheday-status-no">No</span>{% endif %}</div>
-<div class="js-articleoftheday-date">Date: <span class="js-articleoftheday-date-value">{% if status %}{{ articleOfTheDay.date|date('Y-m-d')}}{% else %}not set{% endif %}</span><span class="js-articleoftheday-date-change">{% if status %} (<a href="#">change</a>){% endif %}</span>{% if status %}<input type="submit" id="unmark-btn" style="float: right;" value="Unmark" name="articleofthedayform_submit" class="button">{% endif %}</div>
+<div class="js-articleoftheday-date">Date: <span class="js-articleoftheday-date-value">{% if status %}{{ articleOfTheDay.date|date('Y-m-d')}}{% else %}not set{% endif %}</span><span class="js-articleoftheday-date-change">{% if status %} (<a href="#">change</a>){% endif %}</span></div>
 
+<div class="js-articleoftheday-status">Visible in: {% if status is empty %}<span> none. </span>{% else %} 
+    {% if status %}<input type="submit" id="unmark-btn" style="float: right;" value="Unmark" name="articleofthedayform_submit" class="button">{% endif %}
+</div>
+<ul style="padding: 0px; margin: 5px 0;">
+    {% for publicationName in publicationsNames %}
+        <li> - {{ publicationName }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <div class="js-articleoftheday-unmark-msg"></div>
 {% if error.exists %}<div class="js-articleoftheday-date-info">You set the same date.</div>{% endif %}
 {% if error.error %}<div class="js-articleoftheday-date-error">Article with chosen date is already set!</div>{% endif %}
+
 <div class="js-articleoftheday-change-date-box {% if status %}js-articleoftheday-change-date-box-hide{% endif %}">
     <form id="js-articleoftheday-changeForm" action="{{ path('newscoop_articlescalendar_default_setarticlesoftheday') }}" method="post" {{ form_enctype(form) }}>
         {{ form_row(form.articleId) }}
         {{ form_row(form.articleLanguageId) }}
         {{ form_row(form.publicationId) }}
-        <h4>Choose date</h4>
+        <h4>Choose date:</h4>
         {{ form_widget(form.custom_date) }}
+        <h4>Choose publication:</h4>
+        {{ form_widget(form.publicationNumbers, {'attr' : {'style' : 'width: 175px'}}) }}
         {{ form_rest(form) }}
         <input type="submit" value="Save" name="articleofthedayform_submit" class="save-button">
     </form>

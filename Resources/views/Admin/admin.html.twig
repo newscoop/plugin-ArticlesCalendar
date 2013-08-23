@@ -4,6 +4,7 @@
 {% block admin_page_title_content %}Settings{% endblock %}
 
 {% block admin_stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ asset('public/bundles/newscooparticlescalendar/scripts/select2-3.4.1/select2.css') }} "/>
 <link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/css/codemirror.css">
 <style>
 .CodeMirror {background: none;margin: 2px; width: 840px; height: 524px;border: 1px solid #C0C0C0;}
@@ -13,16 +14,17 @@
 </style>
 {% endblock %}
 {% block admin_scripts %}
+<script src="{{ asset('public/bundles/newscooparticlescalendar/scripts/select2-3.4.1/select2.js') }}"></script>
 <script type="text/javascript" src="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/js/codemirror.js"></script>
 <script type="text/javascript" src="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/js/css.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
+    $('#settingsform_publicationNumbers').select2({ placeholder: "Choose..."});
     $('#save').live('click', function(e){
         e.preventDefault();
         var format = new Date();
         var d = format.getDate();
-        var m =  format.getMonth();
-        m += 1;
+        var m =  format.getMonth()+1;
         var h = format.getHours();
         var min = format.getMinutes();
         var s = format.getSeconds();
@@ -75,6 +77,16 @@ $(document).ready(function() {
             <tr>
                 <td align="left" valign="top">
                     {{ form_widget(form.rendition , {'attr' : {'class' : 'input_select'}}) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_label(form.publicationNumbers) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_widget(form.publicationNumbers , {'attr' : {'style' : 'width:250px'}}) }}
                 </td>
             </tr>
             <tr>
