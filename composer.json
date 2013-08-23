@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "newscoop/plugins-installer": "*"
+        "newscoop/plugins-installer": ">=v0.2"
     },
     "autoload": {
         "psr-0": { "Newscoop\\ArticlesCalendarBundle": "" }
