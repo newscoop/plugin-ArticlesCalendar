@@ -45,6 +45,7 @@ class LifecycleSubscriber implements EventSubscriberInterface
         $settings->setImageHeight(0);
         $settings->setStyles('/* Some custom CSS */');
         $settings->setIsActive(true);
+        $settings->setPublicationNumbers('2');
         $settings->setCreatedAt(new \DateTime('now'));
         $this->em->persist($settings);
         $this->em->flush();

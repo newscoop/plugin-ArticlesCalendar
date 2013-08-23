@@ -45,6 +45,11 @@ class ArticleOfTheDay
      */
     private $articleNumber;
 
+     /**
+     * @ORM\Column(type="string", name="publication_numbers")
+     */
+    private $publicationNumbers;
+
     /**
      * @ORM\Column(type="integer", name="article_language_id")
      * @var int
@@ -125,6 +130,28 @@ class ArticleOfTheDay
     public function setArticle($article)
     {
         $this->article = $article;
+        
+        return $this;
+    }
+
+    /**
+     * Get publicationNumbers
+     *
+     * @return string
+     */
+    public function getPublicationNumbers()
+    {
+        return $this->publicationNumbers;
+    }
+
+    /**
+     * Set publicationNumbers
+     *
+     * @param string $publicationNumbers
+     */
+    public function setPublicationNumbers($publicationNumbers)
+    {
+        $this->publicationNumbers = $publicationNumbers;
         
         return $this;
     }
