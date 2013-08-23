@@ -36,6 +36,7 @@ class DefaultController extends Controller
         $showDayNames = $request->get('showDayNames', $settings->getShowDayNames());
         $imageWidth = $request->get('image_width', $settings->getImageWidth());
         $imageHeight = $request->get('image_height', $settings->getImageHeight());
+        $publicationNumbers = $request->get('publication_numbers', $settings->getPublicationNumbers());
         $date = $request->get('date', date('Y/m/d'));
         $styles = $settings->getStyles();
 
@@ -117,13 +118,6 @@ class DefaultController extends Controller
         for ($i=0; $i <= 6; $i++) {
             $days[] = $dateFormatter['dayName']->format(strtotime("Sunday +$i days"));
         }
-         
-        $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')->findAll();
-
-        $publicationsIds = array();
-        foreach ($articlesOfTheDay as $articleday) {
-            $publicationsIds[] = '*'.$articleday->getShowIn().'*';
-        }
 
         return array(
             'randomInt' => md5(uniqid('', true)),
@@ -142,7 +136,6 @@ class DefaultController extends Controller
             'styles' => $styles,
             'months' => $months,
             'days' => $days,
-            'showIn' => implode($publicationsIds),
         );
     }
 
@@ -162,8 +155,8 @@ class DefaultController extends Controller
 
         foreach ($articlesOfTheDayDate as $article) {
             $datesArray['datetime'] = $article->getCreatedAt();
-            $publication['publicationId'] = $article->getPublicationId();
         }
+        
         $response = new Response();
         $response->setLastModified(new \DateTime($datesArray['datetime']->format('Y-m-d H:i:s')));
         $response->setPublic();
@@ -174,30 +167,28 @@ class DefaultController extends Controller
 
         $startDate = $request->get('startDate');
         $endDate = $request->get('endDate');
-        $publicationId = $request->get('show_in');
-        $currentPublication = (string)$publication['publicationId'];
+        $publicationNumbers = $request->get('publication_numbers');
 
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
         ));
 
+        $currentPublication = $request->get('currentPublication', $settings->getPublicationNumbers());
         $renditionName = $request->get('renditionName', $settings->getRendition());
         $imageWidth = $request->get('image_width', $settings->getImageWidth());
         $imageHeight = $request->get('image_height', $settings->getImageHeight());
 
         $string = "";
-        if (preg_match_all('/\*(.*?)\*/', $publicationId, $match)) {
-            foreach($match[1] as $value) {
-                if (strlen($value) > 1 && strpos($value, $currentPublication) !== false) {
-                    $string .= 'a.showIn = '.$value.' OR ';
-                }
+        foreach(str_split($currentPublication) as $value) {
+            if (strpos($currentPublication, $value) !== false) {
+                $string .= 'a.publicationNumbers LIKE \'%'.$value.'%\' OR ';
             }
         }
 
         $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
             ->where('a.is_active = true')
-            ->andWhere($string.'a.showIn = :id')
+            ->andWhere($string.'a.publicationNumbers = :id')
             ->setParameter('id', $currentPublication)
             ->getQuery()
             ->getResult();
@@ -291,7 +282,7 @@ class DefaultController extends Controller
                     if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
                         $exists = true;
                         $articleOfTheDay->setIsActive(true);
-                        $articleOfTheDay->setShowIn(implode($data['showIn']));
+                        $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
                         $em->flush();
 
                         return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
@@ -314,7 +305,7 @@ class DefaultController extends Controller
 
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setCreatedAt(new \DateTime());
-                    $articleOfTheDay->setShowIn(implode($data['showIn']));
+                    $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
                     $articleOfTheDay->setIsActive(true);
                 } else {
                     $status = true;
@@ -329,7 +320,7 @@ class DefaultController extends Controller
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setArticle($article);
                     $articleOfTheDay->setPublicationId($data['publicationId']);
-                    $articleOfTheDay->setShowIn(implode($data['showIn']));
+                    $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
                     $em->persist($articleOfTheDay);
                 }
 
@@ -353,14 +344,32 @@ class DefaultController extends Controller
      * @return array
      */
     private function returnData($article, $form, $status, $exists, $error, $articleOfTheDay) {
-        
+        $em = $this->container->get('em');
+        $string = "";
+        foreach(str_split($articleOfTheDay->getPublicationNumbers()) as $value) {
+            if (strpos($articleOfTheDay->getPublicationNumbers(), $value) !== false) {
+                $string .= 'p.id = '.$value.' OR ';
+            }
+        }
+
+        $publications = $em->getRepository('Newscoop\Entity\Publication')
+            ->createQueryBuilder('p')
+            ->where(substr($string, 0, -4))
+            ->getQuery()
+            ->getResult();
+
+        foreach ($publications as $publication) {
+            $publicationsArray[] = $publication->getName();
+        }
+
         return $this->container->get('templating')->renderResponse('NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig',
             array(
                 'article' => $article,
                 'form' => $form->createView(),
                 'status' => $status,
                 'error' => array('exists' => $exists, 'error' => $error),
-                'articleOfTheDay' => $articleOfTheDay
+                'articleOfTheDay' => $articleOfTheDay,
+                'publicationsNames' => $publicationsArray
             )
         );
     }

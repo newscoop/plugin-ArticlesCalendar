@@ -46,9 +46,9 @@ class ArticleOfTheDay
     private $articleNumber;
 
      /**
-     * @ORM\Column(type="string", name="show_in")
+     * @ORM\Column(type="string", name="publication_numbers")
      */
-    private $showIn;
+    private $publicationNumbers;
 
     /**
      * @ORM\Column(type="integer", name="article_language_id")
@@ -135,23 +135,23 @@ class ArticleOfTheDay
     }
 
     /**
-     * Get showIn
+     * Get publicationNumbers
      *
      * @return string
      */
-    public function getShowIn()
+    public function getPublicationNumbers()
     {
-        return $this->showIn;
+        return $this->publicationNumbers;
     }
 
     /**
-     * Set showIn
+     * Set publicationNumbers
      *
-     * @param string $showIn
+     * @param string $publicationNumbers
      */
-    public function setShowIn($showIn)
+    public function setPublicationNumbers($publicationNumbers)
     {
-        $this->showIn = $showIn;
+        $this->publicationNumbers = $publicationNumbers;
         
         return $this;
     }

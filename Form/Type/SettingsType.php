@@ -17,11 +17,22 @@ class SettingsType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $em = \Zend_Registry::get('container')->getService('em');
         $renditions = \Zend_Registry::get('container')->getService('image.rendition')->getRenditions();
 
         $renditionsArray = array();
         foreach ($renditions as $rendition) {
             $renditionsArray[$rendition->getName()] = $rendition->getName().' ('.$rendition->getWidth().'x'.$rendition->getHeight().')';
+        }
+
+        $publications = $em->getRepository('Newscoop\Entity\Publication')
+            ->createQueryBuilder('p')
+            ->getQuery()
+            ->getResult();
+
+        $publicationsArray = array();
+        foreach ($publications as $publication) {
+            $publicationsArray[$publication->getId()] = $publication->getName();
         }
 
         $builder
@@ -52,6 +63,13 @@ class SettingsType extends AbstractType
         ->add('rendition', 'choice', array(
             'choices' => $renditionsArray,
             'label' => 'Rendition type',
+            'required' => true
+        ))
+        ->add('publicationNumbers', 'choice', array(
+            'choices'   => $publicationsArray,
+            'label' => 'Show articles of the day from:',
+            'error_bubbling' => true,
+            'multiple'  => true,
             'required' => true
         ));
     }

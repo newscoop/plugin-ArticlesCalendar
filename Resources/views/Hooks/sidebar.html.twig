@@ -1,6 +1,6 @@
 <style type="text/css" media="screen">
 .hook-content {font-size: 12px;}
-.hook-content h4{margin-bottom: 0px;padding-bottom: 0px;margin-top: 15px;}
+.hook-content h4{margin-bottom: 0px;margin-top: 15px;}
 .hook-content .save-button {display: block;float: right;}
 .js-articleoftheday-change-date-box-hide {display: none;}
 .js-articleoftheday-date-change a{font-size: 11px; color: #007fb3;}
@@ -12,6 +12,8 @@
 .js-articleoftheday-date {padding: 5px 0;}
 .js-articleoftheday-unmark-msg {padding: 5px 0; color: #468847;}
 </style>
+<link rel="stylesheet" type="text/css" href="{{ asset('public/bundles/newscooparticlescalendar/scripts/select2-3.4.1/select2.css') }} "/>
+<script src="{{ asset('public/bundles/newscooparticlescalendar/scripts/select2-3.4.1/select2.js') }}"></script>
 <div class="articlebox articleoftheday" title="Article of the day">
     <div class="hook-content">
         {{ include('NewscoopArticlesCalendarBundle:Hooks:hook_content.html.twig') }}

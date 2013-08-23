@@ -25,6 +25,7 @@ class HooksListener
         ));
 
         $articleOfTheDayDate = $article->getPublishDate();
+        $publicationsArray = array();
         $status = false;
 
         $articleOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
@@ -44,7 +45,24 @@ class HooksListener
 
         if ($articleOfTheDay) {
             $status = true;
-            $articleOfTheDayDate = $articleOfTheDay->getDate();
+            $articleOfTheDayDate = $articleOfTheDay->getDate(); 
+
+            $string = "";
+            foreach(str_split($articleOfTheDay->getPublicationNumbers()) as $value) {
+                if (strpos($articleOfTheDay->getPublicationNumbers(), $value) !== false) {
+                    $string .= 'p.id = '.$value.' OR ';
+                }
+            }
+
+            $publications = $em->getRepository('Newscoop\Entity\Publication')
+                ->createQueryBuilder('p')
+                ->where(substr($string, 0, -4))
+                ->getQuery()
+                ->getResult();
+
+            foreach ($publications as $publication) {
+                $publicationsArray[] = $publication->getName();
+            }
         }
 
         $form = $this->container->get('form.factory')->create(new ArticleOfTheDayType(), array(
@@ -61,7 +79,8 @@ class HooksListener
                 'form' => $form->createView(),
                 'status' => $status,
                 'error' => array('exists' => false, 'error' => false), 
-                'articleOfTheDay' => $articleOfTheDay
+                'articleOfTheDay' => $articleOfTheDay,
+                'publicationsNames' => $publicationsArray
             )
         );
 

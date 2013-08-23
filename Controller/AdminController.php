@@ -59,6 +59,7 @@ class AdminController extends Controller
                 $settings->setImageWidth($data['imageWidth']);
                 $settings->setImageHeight($data['imageHeight']);
                 $settings->setRendition($data['rendition']);
+                $settings->setPublicationNumbers(implode($data['publicationNumbers']));
 
                 $em->flush();
             }
