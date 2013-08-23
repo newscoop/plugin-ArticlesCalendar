@@ -4,8 +4,7 @@
 .hook-content .save-button {display: block;float: right;}
 .js-articleoftheday-change-date-box-hide {display: none;}
 .js-articleoftheday-date-change a{font-size: 11px; color: #007fb3;}
-.js-articleoftheday-date-info {color: #c09853; padding: 5px 0;}
-.js-articleoftheday-date-error {color: #b94a48; padding: 5px 0;}
+.js-articleoftheday-success {color: #468847; padding: 5px 0;}
 .js-articleoftheday-status {padding: 5px 0;}
 .js-articleoftheday-status-yes {color: #468847;}
 .js-articleoftheday-status-no {color: #b94a48;}
@@ -30,7 +29,7 @@ $('#unmark-btn').live('click', function(e) {
         dataType: "html",
         success: function(msg){
             $('.articleoftheday .hook-content').html(msg);
-            $('.js-articleoftheday-unmark-msg').append('Article successfully unmarked.');
+            $('.js-articleoftheday-unmark-msg').append('<center>Article successfully unmarked.</center>');
             $('.datepicker').datepicker({
                 dateFormat: 'yy-mm-dd'
             });

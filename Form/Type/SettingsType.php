@@ -68,9 +68,8 @@ class SettingsType extends AbstractType
         ->add('publicationNumbers', 'choice', array(
             'choices'   => $publicationsArray,
             'label' => 'Show articles of the day from:',
-            'error_bubbling' => true,
             'multiple'  => true,
-            'required' => true
+            'required' => false
         ));
     }
 

@@ -69,7 +69,8 @@ class HooksListener
             'custom_date' => $articleOfTheDayDate->format('Y-m-d'),
             'articleId' => $article->getNumber(),
             'articleLanguageId' => $article->getLanguageId(),
-            'publicationId' => $article->getPublicationId()
+            'publicationId' => $article->getPublicationId(),
+            'publicationNumbers' => explode(',', $article->getPublicationId())
         ), array());
 
         $response = $this->container->get('templating')->renderResponse(
@@ -78,7 +79,7 @@ class HooksListener
                 'article' => $article,
                 'form' => $form->createView(),
                 'status' => $status,
-                'error' => array('exists' => false, 'error' => false), 
+                'success' => false,
                 'articleOfTheDay' => $articleOfTheDay,
                 'publicationsNames' => $publicationsArray
             )

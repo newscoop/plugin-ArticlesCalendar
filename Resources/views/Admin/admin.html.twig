@@ -20,6 +20,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('#settingsform_publicationNumbers').select2({ placeholder: "Choose..."});
+     $('#settingsform_rendition').select2();
     $('#save').live('click', function(e){
         e.preventDefault();
         var format = new Date();
@@ -76,7 +77,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left" valign="top">
-                    {{ form_widget(form.rendition , {'attr' : {'class' : 'input_select'}}) }}
+                    {{ form_widget(form.rendition , {'attr' : {'style' : 'width:250px'}}) }}
                 </td>
             </tr>
             <tr>
