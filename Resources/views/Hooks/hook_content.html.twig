@@ -1,39 +1,39 @@
 <div class="article-data" data-article-number="{{ article.getNumber() }}" data-article-language="{{ article.getLanguageId() }}"></div>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#articleofthedayform_publicationNumbers').select2({ placeholder: "Choose..."});
+    $('#articleofthedayform_publicationNumbers').select2({ placeholder: "{{ 'plugin.label.choose'|trans }}"});
 });
 </script>
-{% if success %}<div class="js-articleoftheday-success"><center>Successfully set.</center></div>{% endif %}
+{% if success %}<div class="js-articleoftheday-success"><center>{{ 'plugin.msg.success'|trans }}</center></div>{% endif %}
 <div class="js-articleoftheday-unmark-msg"></div>
-<div class="js-articleoftheday-status">Status: 
+<div class="js-articleoftheday-status">{{ 'plugin.label.status'|trans }} 
     {% if status %}
-        <span class="js-articleoftheday-status-yes">Yes</span>
+        <span class="js-articleoftheday-status-yes">{{ 'plugin.label.yes'|trans }}</span>
     {% else %}
-        <span class="js-articleoftheday-status-no">No</span>
+        <span class="js-articleoftheday-status-no">{{ 'plugin.label.no'|trans }}</span>
     {% endif %}
 </div>
-<div class="js-articleoftheday-date">Date: 
+<div class="js-articleoftheday-date">{{ 'plugin.label.date'|trans }} 
     <span class="js-articleoftheday-date-value">
         {% if status %}
             {{ articleOfTheDay.date|date('Y-m-d')}}
         {% else %}
-            not set
+            {{ 'plugin.msg.notset'|trans }}
         {% endif %}
     </span>
     <span class="js-articleoftheday-date-change">
         {% if status %} 
-        (<a href="#">change</a>)
+        (<a href="#">{{ 'plugin.label.change'|trans }} </a>)
         {% endif %}
     </span>
 </div>
 <div class="js-articleoftheday-status">
-    <strong>Visible in: </strong>
+    <strong>{{ 'plugin.label.visible'|trans }}</strong>
     {% if status is empty %}
-        <span> none. </span>
+        <span> {{ 'plugin.label.none'|trans }} </span>
     {% endif %}
     {% if status %}
-        <input type="submit" id="unmark-btn" style="float: right;" value="Unmark" name="articleofthedayform_submit" class="button">
+        <input type="submit" id="unmark-btn" style="float: right;" value="{{ 'plugin.btn.unmark'|trans }}" name="articleofthedayform_submit" class="button">
     {% endif %}
 </div>
 {% if status %}
@@ -49,11 +49,11 @@ $(document).ready(function() {
         {{ form_row(form.articleId) }}
         {{ form_row(form.articleLanguageId) }}
         {{ form_row(form.publicationId) }}
-        <h4>Choose date:</h4>
+        <h4>{{ 'plugin.label.choosedate'|trans }}</h4>
         {{ form_widget(form.custom_date) }}
-        <h4>Choose publication:</h4>
+        <h4>{{ 'plugin.label.choosepublication'|trans }}</h4>
         {{ form_widget(form.publicationNumbers, {'attr' : {'style' : 'width: 175px'}}) }}
         {{ form_rest(form) }}
-        <input type="submit" value="Save" name="articleofthedayform_submit" class="save-button">
+        <input type="submit" value="{{ 'plugin.btn.save'|trans }}" name="articleofthedayform_submit" class="save-button">
     </form>
 </div>

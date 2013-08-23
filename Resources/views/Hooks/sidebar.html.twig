@@ -29,7 +29,7 @@ $('#unmark-btn').live('click', function(e) {
         dataType: "html",
         success: function(msg){
             $('.articleoftheday .hook-content').html(msg);
-            $('.js-articleoftheday-unmark-msg').append('<center>Article successfully unmarked.</center>');
+            $('.js-articleoftheday-unmark-msg').append('<center>{{ 'plugin.msg.unmarked'|trans }}</center>');
             $('.datepicker').datepicker({
                 dateFormat: 'yy-mm-dd'
             });

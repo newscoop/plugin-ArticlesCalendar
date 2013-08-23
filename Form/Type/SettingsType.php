@@ -37,37 +37,37 @@ class SettingsType extends AbstractType
 
         $builder
         ->add('firstDay', 'integer', array(
-            'label' => 'First day',
+            'label' => 'plugin.label.firstday',
             'attr' => array('min'=>'1'),
             'error_bubbling' => true,
             'required' => true
         ))
         ->add('showDayNames', 'checkbox', array(
-            'label' => 'Show day names?',
+            'label' => 'plugin.label.showdays',
             'required' => false
         ))
         ->add('navigation', 'checkbox', array(
-            'label' => 'Show navigation?',
+            'label' => 'plugin.label.shownav',
             'required' => false
         ))
         ->add('imageWidth', 'integer', array(
-            'label' => 'Image width (in pixels)',
+            'label' => 'plugin.label.width',
             'attr' => array('min'=>'0'),
             'required' => false
         ))
         ->add('imageHeight', 'integer', array(
-            'label' => 'Image height (in pixels)',
+            'label' => 'plugin.label.height',
             'attr' => array('min'=>'0'),
             'required' => false
         ))
         ->add('rendition', 'choice', array(
             'choices' => $renditionsArray,
-            'label' => 'Rendition type',
+            'label' => 'plugin.label.rendition',
             'required' => true
         ))
         ->add('publicationNumbers', 'choice', array(
             'choices'   => $publicationsArray,
-            'label' => 'Show articles of the day from:',
+            'label' => 'plugin.label.showfrom',
             'multiple'  => true,
             'required' => false
         ));

@@ -164,8 +164,6 @@ class DefaultController extends Controller
             return $response;
         }
 
-        $startDate = $request->get('startDate');
-        $endDate = $request->get('endDate');
         $publicationNumbers = $request->get('publication_numbers');
 
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
