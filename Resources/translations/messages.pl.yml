@@ -1,0 +1,37 @@
+plugin:
+  btn:
+    save: Zapisz
+    unmark: Odznacz
+    prev: "Poprzedni miesiąc"
+    next: "Następny miesiąc"
+  label:
+    calendar:
+      title: Artykuły dnia
+    change: Zmień
+    choose: Wybierz ...
+    choosedate: 'Wybierz datę:'
+    choosepublication: 'Wybierz gazetę:'
+    css: 'Dodaj własny CSS aby dostosować widget kalendarza:'
+    date: 'Data:'
+    no: 'Nie'
+    firstday: Pierwszy dzień
+    height: Wysokość obrazu (w pikselach)
+    modified: 'Ostatnia modyfikacja:'
+    none: nigdzie.
+    optional: 'Opcjonalnie:'
+    rendition: Rozmiary obrazka
+    settings: Ustawienia
+    showdays: Pokaż nazwy dni?
+    showfrom: 'Pokaż artykuły dni z:'
+    shownav: Pokaż nawigację?
+    status: 'Status:'
+    title: Artykuły dnia - Plugin
+    yes: Tak
+    visible: 'Widoczne w:'
+    width: Szerokość obrazu (w pikselach)
+  msg:
+    error: Nie można zapisać CSS.
+    notset: nie ustawiony.
+    saved: Zapisano pomyślnie.
+    success: Ustawiono pomyślnie.
+    unmarked: Artykuł pomyślnie odznaczony.

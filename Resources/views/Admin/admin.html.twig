@@ -1,7 +1,7 @@
 {% extends 'NewscoopNewscoopBundle::admin_layout.html.twig' %}
 
-{% block admin_title %}Article of the day Calendar Plugin{% endblock %}
-{% block admin_page_title_content %}Settings{% endblock %}
+{% block admin_title %}{{ 'plugin.label.title'|trans }}{% endblock %}
+{% block admin_page_title_content %}{{ 'plugin.label.settings'|trans }}{% endblock %}
 
 {% block admin_stylesheets %}
 <link rel="stylesheet" type="text/css" href="{{ asset('public/bundles/newscooparticlescalendar/scripts/select2-3.4.1/select2.css') }} "/>
@@ -19,7 +19,8 @@
 <script type="text/javascript" src="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/js/css.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-    $('#settingsform_publicationNumbers').select2({ placeholder: "Choose..."});
+    $('#settingsform_publicationNumbers').select2({ placeholder: "{{ 'plugin.label.choose'|trans }}"});
+     $('#settingsform_rendition').select2();
     $('#save').live('click', function(e){
         e.preventDefault();
         var format = new Date();
@@ -37,11 +38,11 @@ $(document).ready(function() {
             dataType: "json",
             success: function(msg){
                 if (msg.status) {
-                    flashMessage('Successfully saved.');
+                    flashMessage('{{ 'plugin.msg.saved'|trans }}');
                     $('#time').empty();
                     $('#time').append(time);
                 } else {
-                    flashMessage('Could not save stylesheet.', 'error');
+                    flashMessage('{{ 'plugin.msg.error'|trans }}', 'error');
                 }
             }
         });
@@ -76,7 +77,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left" valign="top">
-                    {{ form_widget(form.rendition , {'attr' : {'class' : 'input_select'}}) }}
+                    {{ form_widget(form.rendition , {'attr' : {'style' : 'width:250px'}}) }}
                 </td>
             </tr>
             <tr>
@@ -111,7 +112,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left">
-                    <strong>Optional:</strong>    
+                    <strong>{{ 'plugin.label.optional'|trans }}</strong>    
                 </td>
             </tr>
             <tr>
@@ -139,7 +140,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td colspan="2" align="right" style="padding-top: 10px;">
-                    <input type="submit" value="Save" class="save-button">
+                    <input type="submit" value="{{ 'plugin.btn.save'|trans }}" class="save-button">
                 </td>
             </tr>
             {{ form_rest(form) }}
@@ -150,7 +151,7 @@ $(document).ready(function() {
     <tbody>
         <tr>
             <td>
-                <div class="actions"><string>Add custom CSS to customize Calendar widget:</string><span class="last">Last modified: <span id="time">{{ lastModified|date("Y-m-d H:i:s")}}</span></span></div>
+                <div class="actions"><string>{{ 'plugin.label.css'|trans }}</string><span class="last">{{ 'plugin.label.modified'|trans }} <span id="time">{{ lastModified|date("Y-m-d H:i:s")}}</span></span></div>
             </td>
         </tr>
         <tr>
@@ -167,7 +168,7 @@ $(document).ready(function() {
         </tr>
         <tr>
             <td colspan="2" align="right" style="padding-top: 10px;">
-                <input type="submit" id="save" value="Save" class="save-button">
+                <input type="submit" id="save" value="{{ 'plugin.btn.save'|trans }}" class="save-button">
             </td>
         </tr>
     </tbody>

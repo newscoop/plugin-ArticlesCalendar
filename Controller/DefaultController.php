@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay;
 use Newscoop\ArticlesCalendarBundle\Form\Type\ArticleOfTheDayType;
-use Symfony\Component\Yaml\Parser;
 
 class DefaultController extends Controller
 {
@@ -97,7 +96,7 @@ class DefaultController extends Controller
             \IntlDateFormatter::NONE,
             \date_default_timezone_get(),
             \IntlDateFormatter::GREGORIAN,
-            'MMMM'
+            'MMM'
         );
 
         $dateFormatter['dayName'] = \IntlDateFormatter::create(
@@ -165,8 +164,6 @@ class DefaultController extends Controller
             return $response;
         }
 
-        $startDate = $request->get('startDate');
-        $endDate = $request->get('endDate');
         $publicationNumbers = $request->get('publication_numbers');
 
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
@@ -236,8 +233,7 @@ class DefaultController extends Controller
         $em = $this->container->get('em');
         $form = $this->container->get('form.factory')->create(new ArticleOfTheDayType(), array(), array());
         $status = false;
-        $exists = false;
-        $error = false;
+        $success = false;
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -264,7 +260,7 @@ class DefaultController extends Controller
                     'number' => $data['articleId']
                 ));   
 
-                $date = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')->findOneBy(array(
+                $oldArticles = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')->findBy(array(
                     'date' => new \DateTime($data['custom_date'])
                 ));
 
@@ -274,46 +270,29 @@ class DefaultController extends Controller
                     $articleOfTheDay->setIsActive(false);
                     $em->flush();
 
-                    return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
+                    return $this->returnData($article, $form, $status, $success, $articleOfTheDay);
                 }
 
                 if ($articleOfTheDay) {
-                    
-                    if ($articleOfTheDay->getDate() == new \DateTime($data['custom_date'])) {
-                        $exists = true;
-                        $articleOfTheDay->setIsActive(true);
-                        $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
-                        $em->flush();
-
-                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
-                    }
-                    
-                    if (!$articleOfTheDay->getIsActive() && $date) {
-                        $exists = false;
-                        $error = true;
-                        $status = false;
-
-                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
+        
+                    foreach ($oldArticles as $old) {
+                            $old->setIsActive(false);
                     }
 
-                    if ($articleOfTheDay->getIsActive() && $date) {
-                        $exists = false;
-                        $error = true;
-
-                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
-                    }
-
+                    $success = true;
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setCreatedAt(new \DateTime());
                     $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
                     $articleOfTheDay->setIsActive(true);
+
                 } else {
                     $status = true;
-                    if ($date) {
-                        $status = false;
-                        $error = true;
+                    $success = true;
 
-                        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
+                    if ($oldArticles) {
+                        foreach ($oldArticles as $old) {
+                            $old->setIsActive(false);
+                        }
                     }
 
                     $articleOfTheDay = new ArticleOfTheDay();
@@ -328,7 +307,7 @@ class DefaultController extends Controller
             }
         }
         
-        return $this->returnData($article, $form, $status, $exists, $error, $articleOfTheDay);
+        return $this->returnData($article, $form, $status, $success, $articleOfTheDay);
     }
 
     /**
@@ -337,13 +316,12 @@ class DefaultController extends Controller
      * @param entity object               $article         Article
      * @param Symfony\Component\Form\Form $form            Form
      * @param bool                        $status          Article of the day status
-     * @param bool                        $exists          Shows message if an article exists
-     * @param bool                        $error           Shows error message
+     * @param bool                        $success         Shows success message
      * @param entity object               $articleOfTheDay Article of the day
      *
      * @return array
      */
-    private function returnData($article, $form, $status, $exists, $error, $articleOfTheDay) {
+    private function returnData($article, $form, $status, $success, $articleOfTheDay) {
         $em = $this->container->get('em');
         $string = "";
         foreach(str_split($articleOfTheDay->getPublicationNumbers()) as $value) {
@@ -367,7 +345,7 @@ class DefaultController extends Controller
                 'article' => $article,
                 'form' => $form->createView(),
                 'status' => $status,
-                'error' => array('exists' => $exists, 'error' => $error),
+                'success' => $success,
                 'articleOfTheDay' => $articleOfTheDay,
                 'publicationsNames' => $publicationsArray
             )

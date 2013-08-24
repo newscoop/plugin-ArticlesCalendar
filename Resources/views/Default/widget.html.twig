@@ -63,6 +63,11 @@ $("#wobs_calendar_{{ randomInt }}").wobscalendar({
         {% for day in days %}
             '{{ day }}',
         {% endfor %}
-    ]
+    ],
+    'title': "{{ 'plugin.label.calendar.title'|trans }}",
+    'buttons': {
+        'prev': "{{ 'plugin.btn.prev'|trans }}",
+        'next': "{{ 'plugin.btn.next'|trans }}"
+    }
 });
 </script>

@@ -36,7 +36,6 @@ class ArticleOfTheDayType extends AbstractType
         ))
         ->add('publicationNumbers', 'choice', array(
          'choices'   => $publicationsArray,
-            'label' => 'Choose publications:',
             'error_bubbling' => true,
             'multiple'  => true,
             'required' => true
