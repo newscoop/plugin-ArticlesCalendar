@@ -144,20 +144,16 @@ class DefaultController extends Controller
     public function getArticlesOfTheDayAction(Request $request)
     {   
         $em = $this->container->get('em');
-        $articlesOfTheDayDate = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
+        $lastArticleOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
             ->where('a.is_active = true')
             ->orderBy('a.created_at', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getResult();
-
-        foreach ($articlesOfTheDayDate as $article) {
-            $datesArray['datetime'] = $article->getCreatedAt();
-        }
+            ->getSingleResult();
         
         $response = new Response();
-        $response->setLastModified(new \DateTime($datesArray['datetime']->format('Y-m-d H:i:s')));
+        $response->setLastModified($lastArticleOfTheDay->getCreatedAt());
         $response->setPublic();
 
         if ($response->isNotModified($request)) {
