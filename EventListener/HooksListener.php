@@ -49,8 +49,8 @@ class HooksListener
 
             $string = "";
             if (preg_match_all('/\*(.*?)\*/', $articleOfTheDay->getPublicationNumbers(), $match)) {
-            foreach($match[1] as $value) {
-                $string .= 'p.id = '. $value .' OR ';
+                foreach($match[1] as $value) {
+                    $string .= 'p.id = '. $value .' OR ';
                 }
             }
 

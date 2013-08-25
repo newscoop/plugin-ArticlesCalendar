@@ -69,7 +69,7 @@ class SettingsType extends AbstractType
             'choices'   => $publicationsArray,
             'label' => 'plugin.label.showfrom',
             'multiple'  => true,
-            'required' => false
+            'required' => true
         ));
     }
 

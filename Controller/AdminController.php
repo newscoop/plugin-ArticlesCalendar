@@ -30,6 +30,24 @@ class AdminController extends Controller
             'is_active' => true
         ));
 
+        $string = "";
+        if (preg_match_all('/\*(.*?)\*/', $settings->getPublicationNumbers(), $match)) {
+            foreach($match[1] as $value) {
+                $string .= 'p.id = '. $value .' OR ';
+            }
+        }
+
+        $publications = $em->getRepository('Newscoop\Entity\Publication')
+            ->createQueryBuilder('p')
+            ->where(substr($string, 0, -4))
+            ->getQuery()
+            ->getResult();
+
+        $publicationsArray = array();
+        foreach ($publications as $publication) {
+            $publicationsArray[] = $publication->getId();
+        }
+
         $form = $this->container->get('form.factory')->create(new SettingsType(), array(
             'firstDay' => $settings->getFirstDay(),
             'showDayNames' => $settings->getShowDayNames(),
@@ -37,6 +55,7 @@ class AdminController extends Controller
             'imageWidth' => $settings->getImageWidth(),
             'imageHeight' => $settings->getImageHeight(),
             'rendition' => $settings->getRendition(),
+            'publicationNumbers' => $publicationsArray,
         ), array());
 
         if ($request->isMethod('POST')) {
