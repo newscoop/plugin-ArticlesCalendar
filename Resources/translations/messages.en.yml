@@ -1,7 +1,7 @@
 plugin:
   label:
     calendar:
-      title: "Articles of the Days"
+      title: "Articles of the Day"
     choose: "Choose..."
     status: "Status:"
     yes: Yes

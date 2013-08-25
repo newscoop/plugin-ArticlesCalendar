@@ -172,17 +172,16 @@ class DefaultController extends Controller
         $imageHeight = $request->get('image_height', $settings->getImageHeight());
 
         $string = "";
-        foreach(str_split($currentPublication) as $value) {
-            if (strpos($currentPublication, $value) !== false) {
-                $string .= 'a.publicationNumbers LIKE \'%'.$value.'%\' OR ';
+        if (preg_match_all('/\*(.*?)\*/', $currentPublication, $match)) {
+            foreach($match[1] as $value) {
+                $string .= 'a.publicationNumbers LIKE \'%*'. $value .'*%\' OR ';
             }
         }
 
         $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
             ->where('a.is_active = true')
-            ->andWhere($string.'a.publicationNumbers = :id')
-            ->setParameter('id', $currentPublication)
+            ->andWhere(substr($string, 0, -4))
             ->getQuery()
             ->getResult();
 
@@ -278,7 +277,7 @@ class DefaultController extends Controller
                     $success = true;
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setCreatedAt(new \DateTime());
-                    $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
+                    $articleOfTheDay->setPublicationNumbers('*'.implode($data['publicationNumbers']).'*');
                     $articleOfTheDay->setIsActive(true);
 
                 } else {
@@ -295,7 +294,7 @@ class DefaultController extends Controller
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setArticle($article);
                     $articleOfTheDay->setPublicationId($data['publicationId']);
-                    $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
+                    $articleOfTheDay->setPublicationNumbers('*'.implode($data['publicationNumbers']).'*');
                     $em->persist($articleOfTheDay);
                 }
 
@@ -320,9 +319,9 @@ class DefaultController extends Controller
     private function returnData($article, $form, $status, $success, $articleOfTheDay) {
         $em = $this->container->get('em');
         $string = "";
-        foreach(str_split($articleOfTheDay->getPublicationNumbers()) as $value) {
-            if (strpos($articleOfTheDay->getPublicationNumbers(), $value) !== false) {
-                $string .= 'p.id = '.$value.' OR ';
+        if (preg_match_all('/\*(.*?)\*/', $articleOfTheDay->getPublicationNumbers(), $match)) {
+            foreach($match[1] as $value) {
+                $string .= 'p.id = '. $value .' OR ';
             }
         }
 

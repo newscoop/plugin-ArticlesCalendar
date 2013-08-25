@@ -48,9 +48,9 @@ class HooksListener
             $articleOfTheDayDate = $articleOfTheDay->getDate(); 
 
             $string = "";
-            foreach(str_split($articleOfTheDay->getPublicationNumbers()) as $value) {
-                if (strpos($articleOfTheDay->getPublicationNumbers(), $value) !== false) {
-                    $string .= 'p.id = '.$value.' OR ';
+            if (preg_match_all('/\*(.*?)\*/', $articleOfTheDay->getPublicationNumbers(), $match)) {
+            foreach($match[1] as $value) {
+                $string .= 'p.id = '. $value .' OR ';
                 }
             }
 

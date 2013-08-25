@@ -26,15 +26,9 @@ class AdminController extends Controller
     public function adminAction(Request $request)
     {  
         $em = $this->container->get('em');
-        $insert = false;
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
         ));
-
-        if (!$settings) {
-            $insert = true;
-            $settings = new Settings();
-        }
 
         $form = $this->container->get('form.factory')->create(new SettingsType(), array(
             'firstDay' => $settings->getFirstDay(),
@@ -49,17 +43,13 @@ class AdminController extends Controller
             $form->bind($request);
             if ($form->isValid()) {
                 $data = $form->getData();
-                if ($insert) {
-                    $em->persist($settings);
-                }
-                
                 $settings->setFirstDay($data['firstDay']);
                 $settings->setShowDayNames($data['showDayNames']);
                 $settings->setNavigation($data['navigation']);
                 $settings->setImageWidth($data['imageWidth']);
                 $settings->setImageHeight($data['imageHeight']);
                 $settings->setRendition($data['rendition']);
-                $settings->setPublicationNumbers(implode($data['publicationNumbers']));
+                $settings->setPublicationNumbers('*'.implode($data['publicationNumbers']).'*');
 
                 $em->flush();
             }
