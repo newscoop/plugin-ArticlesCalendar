@@ -30,6 +30,19 @@ class DefaultController extends Controller
             'is_active' => true
         ));
 
+        $response = new Response();
+        $response->setLastModified($settings->getCreatedAt());
+        $response->setPublic();
+
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
+
+        $em = $this->container->get('em');
+        $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
+            'is_active' => true
+        ));
+
         $firstDay = $request->get('firstDay', $settings->getFirstDay());
         $navigation = $request->get('navigation', $settings->getNavigation());
         $showDayNames = $request->get('showDayNames', $settings->getShowDayNames());
@@ -135,7 +148,7 @@ class DefaultController extends Controller
             $days[] = $dateFormatter['dayName']->format(strtotime("Sunday +$i days"));
         }
 
-        return array(
+        $response->setContent($this->container->get('templating')->render('NewscoopArticlesCalendarBundle:Default:widget.html.twig' ,array(
             'randomInt' => md5(uniqid('', true)),
             'today' => explode('/', date('Y/m/d')),
             'year' => $year,
@@ -152,7 +165,11 @@ class DefaultController extends Controller
             'styles' => $styles,
             'months' => $months,
             'days' => $days,
-        );
+        )));
+
+        $response->headers->set('Content-Type', 'text/html');
+
+        return $response;
     }
 
     /**
@@ -246,6 +263,7 @@ class DefaultController extends Controller
         $form = $this->container->get('form.factory')->create(new ArticleOfTheDayType(), array(), array());
         $status = false;
         $success = false;
+        $numbers = "";
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -288,13 +306,18 @@ class DefaultController extends Controller
                 if ($articleOfTheDay) {
         
                     foreach ($oldArticles as $old) {
-                            $old->setIsActive(false);
+                        $old->setIsActive(false);
                     }
 
                     $success = true;
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setCreatedAt(new \DateTime());
-                    $articleOfTheDay->setPublicationNumbers('*'.implode($data['publicationNumbers']).'*');
+
+                    foreach ($data['publicationNumbers'] as $value) {
+                        $numbers .= '*'.$value.'*';
+                    }
+
+                    $articleOfTheDay->setPublicationNumbers($numbers);
                     $articleOfTheDay->setIsActive(true);
 
                 } else {
@@ -307,11 +330,15 @@ class DefaultController extends Controller
                         }
                     }
 
+                    foreach ($data['publicationNumbers'] as $value) {
+                        $numbers .= '*'.$value.'*';
+                    }
+
                     $articleOfTheDay = new ArticleOfTheDay();
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setArticle($article);
                     $articleOfTheDay->setPublicationId($data['publicationId']);
-                    $articleOfTheDay->setPublicationNumbers('*'.implode($data['publicationNumbers']).'*');
+                    $articleOfTheDay->setPublicationNumbers($numbers);
                     $em->persist($articleOfTheDay);
                 }
 

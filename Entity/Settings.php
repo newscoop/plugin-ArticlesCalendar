@@ -76,9 +76,15 @@ class Settings
 
     /**
      * @ORM\Column(type="datetime", name="created_at")
-     * @var string
+     * @var datetime
      */
     private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime", name="last_modified")
+     * @var datetime
+     */
+    private $last_modified;
 
     /**
      * @ORM\Column(type="boolean", name="is_active")
@@ -327,6 +333,29 @@ class Settings
     public function setCreatedAt(\DateTime $created_at)
     {
         $this->created_at = $created_at;
+        
+        return $this;
+    }
+
+    /**
+     * Get last modified date
+     *
+     * @return datetime
+     */
+    public function getLastModified()
+    {
+        return $this->last_modified;
+    }
+
+    /**
+     * Set last modified date
+     *
+     * @param datetime $last_modified
+     * @return datetime
+     */
+    public function setLastModified(\DateTime $last_modified)
+    {
+        $this->last_modified = $last_modified;
         
         return $this;
     }

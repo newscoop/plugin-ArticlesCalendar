@@ -68,7 +68,12 @@ class AdminController extends Controller
                 $settings->setImageWidth($data['imageWidth']);
                 $settings->setImageHeight($data['imageHeight']);
                 $settings->setRendition($data['rendition']);
-                $settings->setPublicationNumbers('*'.implode($data['publicationNumbers']).'*');
+                $numbers = "";
+                foreach ($data['publicationNumbers'] as $value) {
+                    $numbers .= '*'.$value.'*';
+                }
+                $settings->setPublicationNumbers($numbers);
+                $settings->setCreatedAt(new \Datetime("now"));
 
                 $em->flush();
             }
@@ -77,7 +82,7 @@ class AdminController extends Controller
         return array(
             'form' => $form->createView(),
             'styles' => $settings->getStyles(),
-            'lastModified' => $settings->getCreatedAt(),
+            'lastModified' => $settings->getLastModified(),
         );
     }
 
@@ -93,7 +98,7 @@ class AdminController extends Controller
             ));
 
             $settings->setStyles($request->get('styles'));
-            $settings->setCreatedAt(new \Datetime($request->get('lastModified')));
+            $settings->setLastModified(new \Datetime($request->get('lastModified')));
             $em->flush();
         } catch (\Exception $e) {
             return new Response(json_encode(array('status' => false)));

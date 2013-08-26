@@ -43,6 +43,7 @@ class LifecycleSubscriber implements EventSubscriberInterface
         $settings->setIsActive(true);
         $settings->setPublicationNumbers('*2*');
         $settings->setCreatedAt(new \DateTime('now'));
+        $settings->setLastModified(new \DateTime('now'));
         $this->em->persist($settings);
         $this->em->flush();
     }
