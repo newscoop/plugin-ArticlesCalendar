@@ -40,6 +40,8 @@ class LifecycleSubscriber implements EventSubscriberInterface
         $settings->setImageWidth(0);
         $settings->setImageHeight(0);
         $settings->setStyles('/* Some custom CSS */');
+        $settings->setEarliestMonth(1);
+        $settings->setLatestMonth('current');
         $settings->setIsActive(true);
         $settings->setPublicationNumbers('*2*');
         $settings->setCreatedAt(new \DateTime('now'));

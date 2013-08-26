@@ -24,6 +24,8 @@ plugin:
     height: "Image height (in pixels)"
     rendition: "Rendition type"
     showfrom: "Show articles of the day from:"
+    earliest: "Earliest month"
+    latest: "Latest month"
   msg:
     success: "Successfully set."
     notset: "not set."

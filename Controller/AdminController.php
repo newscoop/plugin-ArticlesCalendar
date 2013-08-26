@@ -56,6 +56,8 @@ class AdminController extends Controller
             'imageHeight' => $settings->getImageHeight(),
             'rendition' => $settings->getRendition(),
             'publicationNumbers' => $publicationsArray,
+            'earliestMonth' => $settings->getEarliestMonth(),
+            'latestMonth' => $settings->getLatestMonth() == 'current' ? date('m') : $settings->getLatestMonth(),
         ), array());
 
         if ($request->isMethod('POST')) {
@@ -68,12 +70,21 @@ class AdminController extends Controller
                 $settings->setImageWidth($data['imageWidth']);
                 $settings->setImageHeight($data['imageHeight']);
                 $settings->setRendition($data['rendition']);
+                $settings->setEarliestMonth($data['earliestMonth']);
+                $settings->setCreatedAt(new \Datetime("now"));
+
+                if ($data['latestMonth'] == date('m')) {
+                    $settings->setLatestMonth('current');
+                } else {
+                    $settings->setLatestMonth($data['latestMonth']);
+                }
+
                 $numbers = "";
                 foreach ($data['publicationNumbers'] as $value) {
                     $numbers .= '*'.$value.'*';
                 }
+
                 $settings->setPublicationNumbers($numbers);
-                $settings->setCreatedAt(new \Datetime("now"));
 
                 $em->flush();
             }

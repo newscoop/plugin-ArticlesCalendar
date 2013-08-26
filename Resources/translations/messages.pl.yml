@@ -29,6 +29,8 @@ plugin:
     yes: Tak
     visible: 'Widoczne w:'
     width: Szerokość obrazu (w pikselach)
+    earliest: "Pierwszy miesiąc"
+    latest: "Ostatni miesiąc"
   msg:
     error: Nie można zapisać CSS.
     notset: nie ustawiony.

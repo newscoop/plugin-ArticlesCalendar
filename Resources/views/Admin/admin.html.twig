@@ -71,6 +71,26 @@ $(document).ready(function() {
                 </td>
             </tr>
             <tr>
+                <td align="left">   
+                    {{ form_label(form.earliestMonth) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_widget(form.earliestMonth, {'attr' : {'class' : 'input_text'}}) }}
+                </td>
+            </tr>
+             <tr>
+                <td align="left">   
+                    {{ form_label(form.latestMonth) }}
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top">
+                    {{ form_widget(form.latestMonth, {'attr' : {'class' : 'input_text'}}) }}
+                </td>
+            </tr>
+            <tr>
                 <td align="left" valign="top">
                     {{ form_label(form.rendition) }}
                 </td>

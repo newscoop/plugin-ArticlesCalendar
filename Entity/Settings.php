@@ -69,6 +69,18 @@ class Settings
     private $publicationNumbers;
 
     /**
+     * @ORM\Column(type="integer", name="earliestMonth")
+     * @var int
+     */
+    private $earliestMonth;
+
+    /**
+     * @ORM\Column(type="string", name="latestMonth")
+     * @var string
+     */
+    private $latestMonth;
+
+    /**
      * @ORM\Column(type="text", name="styles", nullable=true)
      * @var text
      */
@@ -266,6 +278,52 @@ class Settings
         $this->publicationNumbers = $publicationNumbers;
         
         return $this;
+    }
+
+    /**
+     * Get earliestMonth
+     *
+     * @return int
+     */
+    public function getEarliestMonth()
+    {
+        return $this->earliestMonth;
+    }
+
+    /**
+     * Set earliestMonth
+     *
+     * @param  int $earliestMonth
+     * @return int
+     */
+    public function setEarliestMonth($earliestMonth)
+    {
+        $this->earliestMonth = $earliestMonth;
+        
+        return $earliestMonth;
+    }
+
+    /**
+     * Get latestMonth
+     *
+     * @return int
+     */
+    public function getLatestMonth()
+    {
+        return $this->latestMonth;
+    }
+
+    /**
+     * Set latestMonth
+     *
+     * @param  string $latestMonth
+     * @return string
+     */
+    public function setLatestMonth($latestMonth)
+    {
+        $this->latestMonth = $latestMonth;
+        
+        return $latestMonth;
     }
 
     /**

@@ -38,11 +38,6 @@ class DefaultController extends Controller
             return $response;
         }
 
-        $em = $this->container->get('em');
-        $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
-            'is_active' => true
-        ));
-
         $firstDay = $request->get('firstDay', $settings->getFirstDay());
         $navigation = $request->get('navigation', $settings->getNavigation());
         $showDayNames = $request->get('showDayNames', $settings->getShowDayNames());
@@ -50,12 +45,13 @@ class DefaultController extends Controller
         $imageHeight = $request->get('image_height', $settings->getImageHeight());
         $publicationNumbers = $request->get('publication_numbers', $settings->getPublicationNumbers());
         $date = $request->get('date', date('Y/m/d'));
+        $latestMonth = $request->get('latestMonth', $settings->getLatestMonth());
+        $earliestMonth = $request->get('earliestMonth', $settings->getEarliestMonth());
         $styles = $settings->getStyles();
 
         $date = explode('/', $date);
         $today = explode('/', date('Y/m/d'));
         $view = 'month';
-        $latestMonth = 'current';
 
         if (isset($date[0])) {
             $year = $date[0];
@@ -70,10 +66,8 @@ class DefaultController extends Controller
         }
 
         $now = new \DateTime("$today[0]-$today[1]");
+        $earliestMonth = date('Y/'.$earliestMonth.'/d');
 
-        $datetime = new \DateTime();
-        $datetime->modify('-12 months');
-        $earliestMonth = $datetime->format('Y/m');
         if (isset($earliestMonth) && $earliestMonth == 'current') {
             $earliestMonth = $today;
         } else if (isset($earliestMonth)) {
@@ -87,13 +81,16 @@ class DefaultController extends Controller
             $earliestMonth = null;
         }
 
-        $latestMonth = $request->get('latestMonth', null);
         if (isset($latestMonth) && $latestMonth == 'current') {
             $latestMonth = $today;
         } else if (isset($latestMonth)) {
-            $latestMonth = explode('/', $latestMonth);
+            $month = $latestMonth-1;
+            $latestMonth = explode('/',date('Y/'.$latestMonth.'/d'));
             $tmp_latest = new \DateTime("$latestMonth[0]-$latestMonth[1]");
 
+            if ($latestMonth <= $earliestMonth) {
+                $earliestMonth = $latestMonth;
+            }
             if ($now > $tmp_latest) {
                 $latestMonth = $today;
             }
@@ -150,7 +147,7 @@ class DefaultController extends Controller
 
         $response->setContent($this->container->get('templating')->render('NewscoopArticlesCalendarBundle:Default:widget.html.twig' ,array(
             'randomInt' => md5(uniqid('', true)),
-            'today' => explode('/', date('Y/m/d')),
+            'today' => $today,
             'year' => $year,
             'month' => $month,
             'day' => $day,
