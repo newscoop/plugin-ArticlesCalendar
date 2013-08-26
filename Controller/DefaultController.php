@@ -88,7 +88,24 @@ class DefaultController extends Controller
             $latestMonth = null;
         }
 
-        $locale = $request->getPreferredLanguage();
+        $attributes = $request->attributes->get('_newscoop_publication_metadata');
+        $val = array();
+        $key = 'id_default_language';
+
+        array_walk_recursive($attributes, function($value, $index) use($key, &$val){
+            if($index == $key) {
+                array_push($val, $value);
+            } 
+        });
+
+        $language = $em->getRepository('Newscoop\Entity\Language')
+            ->createQueryBuilder('l')
+            ->where('l.id = :languageId')
+            ->setParameter('languageId', count($val) > 1 ? 1 : array_pop($val))
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $locale = $language->getCode();
 
         $dateFormatter['month'] = \IntlDateFormatter::create(
             $locale,
