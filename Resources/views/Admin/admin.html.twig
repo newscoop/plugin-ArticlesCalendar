@@ -8,9 +8,9 @@
 <link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/css/codemirror.css">
 <style>
 .CodeMirror {background: none;margin: 2px; width: 840px; height: 546px;border: 1px solid #C0C0C0;}
-#settingTable {float: left; margin-top: 0px; margin-right: 25px;}
+#settingsTable {float: left; margin-top: 0px; margin-right: 25px;}
 .input_select, .input_text {width: 250px;}
-.last {float: right;font-size: 10px;margin-right: 5px;}
+.article-of-the-day-last {float: right;font-size: 10px;margin-right: 5px;}
 </style>
 {% endblock %}
 {% block admin_scripts %}
@@ -53,7 +53,7 @@ $(document).ready(function() {
 
 {% block admin_content %}
 <form action="{{ path('newscoop_articlescalendar_admin_admin') }}" method="post" {{ form_enctype(form) }} >
-    <table id="settingTable" border="0" cellspacing="0" cellpadding="0" class="box_table">
+    <table id="settingsTable" border="0" cellspacing="0" cellpadding="0" class="box_table">
         <tbody>
             <tr>
                 <td>
@@ -171,7 +171,7 @@ $(document).ready(function() {
     <tbody>
         <tr>
             <td>
-                <div class="actions"><string>{{ 'plugin.label.css'|trans }}</string><span class="last">{{ 'plugin.label.modified'|trans }} <span id="time">{{ lastModified|date("Y-m-d H:i:s")}}</span></span></div>
+                <div class="actions"><string>{{ 'plugin.label.css'|trans }}</string><span class="article-of-the-day-last">{{ 'plugin.label.modified'|trans }} <span id="time">{{ lastModified|date("Y-m-d H:i:s")}}</span></span></div>
             </td>
         </tr>
         <tr>
