@@ -60,4 +60,4 @@ This bundle is under the GNU General Public License v3. See the complete license
 
 About
 -------
-Newscoop Article Of The Day Calendar Plugin is a [Sourcefabric o.p.s](https://github.com/sourcefabric) initiative.
+Newscoop Article Of The Day Plugin is a [Sourcefabric o.p.s](https://github.com/sourcefabric) initiative.
