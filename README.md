@@ -12,7 +12,7 @@ Features
 - Define the date of the article of the day
 - Define your own style sheet for the calendar widget appearance
 - Choose publications in which articles may appear
-- Select one of available image resolution types (ex. issuethumb (130x70))
+- Select one of the available image resolution types (ex. issuethumb (130x70))
 - Manually define articles image resolution (optional)
 - Define first day of the month
 - Set the first and last month (months range to be available in calendar)
