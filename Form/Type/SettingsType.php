@@ -65,10 +65,12 @@ class SettingsType extends AbstractType
             'attr' => array('min'=>'1', 'max' => '12'),
             'required' => true
         ))
-        ->add('earliestMonth', 'integer', array(
+        ->add('earliestMonth', 'date', array(
             'label' => 'plugin.label.earliest',
-            'attr' => array('min'=>'1', 'max' => '12'),
-            'required' => true
+            'format' => 'M-yyyy',
+            'years' => range(date('Y'), date('Y')-12),
+            'days' => array(1),
+            'empty_value' => array('day' => false)
         ))
         ->add('rendition', 'choice', array(
             'choices' => $renditionsArray,

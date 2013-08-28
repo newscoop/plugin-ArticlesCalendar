@@ -54,16 +54,15 @@ class HooksListener
             $status = true;
             $articleOfTheDayDate = $articleOfTheDay->getDate(); 
 
-            $string = "";
-            if (preg_match_all('/\*(.*?)\*/', $articleOfTheDay->getPublicationNumbers(), $match)) {
-                foreach($match[1] as $value) {
-                    $string .= 'p.id = '. $value .' OR ';
-                }
+            $query = "";
+            $publicationNumbers = explode(',', $articleOfTheDay->getPublicationNumbers());
+            foreach($publicationNumbers as $value) {
+                $query .= 'p.id = '. $value .' OR ';
             }
 
             $publications = $em->getRepository('Newscoop\Entity\Publication')
                 ->createQueryBuilder('p')
-                ->where(substr($string, 0, -4))
+                ->where(substr($query, 0, -4))
                 ->getQuery()
                 ->getResult();
 
@@ -77,7 +76,7 @@ class HooksListener
             'articleId' => $article->getNumber(),
             'articleLanguageId' => $article->getLanguageId(),
             'publicationId' => $article->getPublicationId(),
-            'publicationNumbers' => explode(',', $article->getPublicationId())
+            'publicationNumbers' => !$articleOfTheDay ? explode(',', $article->getPublicationId()) : $publicationNumbers
         ), array());
 
         $response = $this->container->get('templating')->renderResponse(

@@ -69,7 +69,7 @@ class Settings
     private $publicationNumbers;
 
     /**
-     * @ORM\Column(type="integer", name="earliestMonth")
+     * @ORM\Column(type="datetime", name="earliestMonth")
      * @var int
      */
     private $earliestMonth;
@@ -296,7 +296,7 @@ class Settings
      * @param  int $earliestMonth
      * @return int
      */
-    public function setEarliestMonth($earliestMonth)
+    public function setEarliestMonth(\DateTime $earliestMonth)
     {
         $this->earliestMonth = $earliestMonth;
         

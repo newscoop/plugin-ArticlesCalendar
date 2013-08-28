@@ -10,6 +10,7 @@
 .CodeMirror {background: none;margin: 2px; width: 840px; height: 546px;border: 1px solid #C0C0C0;}
 #settingsTable {float: left; margin-top: 0px; margin-right: 25px;}
 .input_select, .input_text {width: 250px;}
+.input_select_earliest {height: 25px;background-color: #FFFFFF;border: 1px solid #9d9d9d;font-size: 12px;font-family: Arial, Helvetica, sans-serif;vertical-align: top;padding: 2px 2px 2px 0;margin: 0; width: 123px;}
 .article-of-the-day-last {float: right;font-size: 10px;margin-right: 5px;}
 </style>
 {% endblock %}
@@ -77,7 +78,9 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left" valign="top">
-                    {{ form_widget(form.earliestMonth, {'attr' : {'class' : 'input_text'}}) }}
+                    {{ form_widget(form.earliestMonth.day, {'attr' : {'style' : 'display:none'}}) }}
+                    {{ form_widget(form.earliestMonth.month, {'attr' : {'class' : 'input_select_earliest'}}) }} 
+                    {{ form_widget(form.earliestMonth.year, {'attr' : {'class' : 'input_select_earliest'}}) }}
                 </td>
             </tr>
              <tr>

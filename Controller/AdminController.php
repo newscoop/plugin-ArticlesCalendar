@@ -29,17 +29,16 @@ class AdminController extends Controller
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
         ));
-
-        $string = "";
-        if (preg_match_all('/\*(.*?)\*/', $settings->getPublicationNumbers(), $match)) {
-            foreach($match[1] as $value) {
-                $string .= 'p.id = '. $value .' OR ';
-            }
+        
+        $query = "";
+        $publicationNumbers = explode(',', $settings->getPublicationNumbers());
+        foreach($publicationNumbers as $value) {
+            $query .= 'p.id = '. $value .' OR ';
         }
 
         $publications = $em->getRepository('Newscoop\Entity\Publication')
             ->createQueryBuilder('p')
-            ->where(substr($string, 0, -4))
+            ->where(substr($query, 0, -4))
             ->getQuery()
             ->getResult();
 
@@ -79,12 +78,7 @@ class AdminController extends Controller
                     $settings->setLatestMonth($data['latestMonth']);
                 }
 
-                $numbers = "";
-                foreach ($data['publicationNumbers'] as $value) {
-                    $numbers .= '*'.$value.'*';
-                }
-
-                $settings->setPublicationNumbers($numbers);
+                $settings->setPublicationNumbers(implode(',', $data['publicationNumbers']));
 
                 $em->flush();
             }
