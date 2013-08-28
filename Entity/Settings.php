@@ -70,7 +70,7 @@ class Settings
 
     /**
      * @ORM\Column(type="datetime", name="earliestMonth")
-     * @var int
+     * @var datetime
      */
     private $earliestMonth;
 
@@ -293,8 +293,8 @@ class Settings
     /**
      * Set earliestMonth
      *
-     * @param  int $earliestMonth
-     * @return int
+     * @param  datetime $earliestMonth
+     * @return datetime
      */
     public function setEarliestMonth(\DateTime $earliestMonth)
     {
@@ -306,7 +306,7 @@ class Settings
     /**
      * Get latestMonth
      *
-     * @return int
+     * @return datetime
      */
     public function getLatestMonth()
     {
