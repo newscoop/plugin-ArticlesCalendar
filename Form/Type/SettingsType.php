@@ -67,9 +67,9 @@ class SettingsType extends AbstractType
         ))
         ->add('earliestMonth', 'date', array(
             'label' => 'plugin.label.earliest',
-            'format' => 'M-yyyy',
+            'widget' => 'choice',
+            'format' => 'd-M-yyyy',
             'years' => range(date('Y'), date('Y')-12),
-            'days' => array(1),
             'empty_value' => array('day' => false)
         ))
         ->add('rendition', 'choice', array(
