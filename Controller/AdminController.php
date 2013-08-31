@@ -72,10 +72,10 @@ class AdminController extends Controller
                 $settings->setEarliestMonth($data['earliestMonth']);
                 $settings->setCreatedAt(new \Datetime("now"));
 
-                if ($data['latestMonth'] == date('m')) {
+                if ($data['latestMonth']+1 == date('m')) {
                     $settings->setLatestMonth('current');
                 } else {
-                    $settings->setLatestMonth($data['latestMonth']);
+                    $settings->setLatestMonth($data['latestMonth']+1);
                 }
 
                 $settings->setPublicationNumbers(implode(',', $data['publicationNumbers']));

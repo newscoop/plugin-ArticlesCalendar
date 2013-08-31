@@ -60,10 +60,9 @@ class SettingsType extends AbstractType
             'attr' => array('min'=>'0'),
             'required' => false
         ))
-        ->add('latestMonth', 'integer', array(
+        ->add('latestMonth', 'choice', array(
             'label' => 'plugin.label.latest',
-            'attr' => array('min'=>'1', 'max' => '12'),
-            'required' => true
+            'choices' => range(1,12),
         ))
         ->add('earliestMonth', 'date', array(
             'label' => 'plugin.label.earliest',

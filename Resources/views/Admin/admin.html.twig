@@ -6,12 +6,14 @@
 {% block admin_stylesheets %}
 <link rel="stylesheet" type="text/css" href="{{ asset('public/bundles/newscooparticlescalendar/scripts/select2-3.4.1/select2.css') }} "/>
 <link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/css/codemirror.css">
+<link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/css/bootstrap.min.css">
 <style>
-.CodeMirror {background: none;margin: 2px; width: 840px; height: 546px;border: 1px solid #C0C0C0;}
+.CodeMirror {background: none;margin: 2px; width: 840px; height: 577px;border: 1px solid #C0C0C0;}
 #settingsTable {float: left; margin-top: 0px; margin-right: 25px;}
 .input_select, .input_text {width: 250px;}
-.input_select_earliest {height: 25px;background-color: #FFFFFF;border: 1px solid #9d9d9d;font-size: 12px;font-family: Arial, Helvetica, sans-serif;vertical-align: top;padding: 2px 2px 2px 0;margin: 0; width: 123px;}
-.article-of-the-day-last {float: right;font-size: 10px;margin-right: 5px;}
+.input_select_earliest_month {width: 120px;float: left;margin-right: 8px;}
+.input_select_earliest_year {width: 120px;}
+.article-of-the-day-last {float: right;font-size: 10px;margin-right: 5px;line-height: 20px;}
 </style>
 {% endblock %}
 {% block admin_scripts %}
@@ -68,7 +70,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left" valign="top">
-                    {{ form_widget(form.firstDay, {'attr' : {'class' : 'input_text'}}) }}
+                    {{ form_widget(form.firstDay, {'attr' : {'class' : 'form-control input-sm'}}) }}
                 </td>
             </tr>
             <tr>
@@ -79,8 +81,8 @@ $(document).ready(function() {
             <tr>
                 <td align="left" valign="top">
                     {{ form_widget(form.earliestMonth.day, {'attr' : {'style' : 'display:none'}}) }}
-                    {{ form_widget(form.earliestMonth.month, {'attr' : {'class' : 'input_select_earliest'}}) }} 
-                    {{ form_widget(form.earliestMonth.year, {'attr' : {'class' : 'input_select_earliest'}}) }}
+                    {{ form_widget(form.earliestMonth.month, {'attr' : {'class' : 'form-control input-sm input_select_earliest_month'}}) }} 
+                    {{ form_widget(form.earliestMonth.year, {'attr' : {'class' : 'form-control input-sm input_select_earliest_year'}}) }}
                 </td>
             </tr>
              <tr>
@@ -90,7 +92,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left" valign="top">
-                    {{ form_widget(form.latestMonth, {'attr' : {'class' : 'input_text'}}) }}
+                    {{ form_widget(form.latestMonth, {'attr' : {'class' : 'form-control input-sm'}}) }}
                 </td>
             </tr>
             <tr>
@@ -145,7 +147,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left" valign="top">
-                    {{ form_widget(form.imageWidth, {'attr' : {'class' : 'input_text'}}) }}
+                    {{ form_widget(form.imageWidth, {'attr' : {'class' : 'form-control input-sm'}}) }}
                 </td>
             </tr>
             <tr>
@@ -155,7 +157,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left" valign="top">
-                    {{ form_widget(form.imageHeight, {'attr' : {'class' : 'input_text'}}) }}
+                    {{ form_widget(form.imageHeight, {'attr' : {'class' : 'form-control input-sm'}}) }}
                 </td>
             </tr>
             <tr>
@@ -163,7 +165,7 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td colspan="2" align="right" style="padding-top: 10px;">
-                    <input type="submit" value="{{ 'plugin.btn.save'|trans }}" class="save-button">
+                    <button type="submit" class="btn btn-primary">{{ 'plugin.btn.save'|trans }}</button>
                 </td>
             </tr>
             {{ form_rest(form) }}
@@ -174,7 +176,7 @@ $(document).ready(function() {
     <tbody>
         <tr>
             <td>
-                <div class="actions"><string>{{ 'plugin.label.css'|trans }}</string><span class="article-of-the-day-last">{{ 'plugin.label.modified'|trans }} <span id="time">{{ lastModified|date("Y-m-d H:i:s")}}</span></span></div>
+                <div class="actions"><strong>{{ 'plugin.label.css'|trans }}</strong><span class="label label-primary article-of-the-day-last">{{ 'plugin.label.modified'|trans }} <span id="time">{{ lastModified|date("Y-m-d H:i:s")}}</span></span></div>
             </td>
         </tr>
         <tr>
@@ -191,7 +193,7 @@ $(document).ready(function() {
         </tr>
         <tr>
             <td colspan="2" align="right" style="padding-top: 10px;">
-                <input type="submit" id="save" value="{{ 'plugin.btn.save'|trans }}" class="save-button">
+                <button type="submit" id="save" class="btn btn-primary">{{ 'plugin.btn.save'|trans }}</button>
             </td>
         </tr>
     </tbody>
