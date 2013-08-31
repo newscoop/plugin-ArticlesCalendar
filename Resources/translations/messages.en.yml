@@ -1,7 +1,7 @@
 plugin:
   label:
     calendar:
-      title: "Articles of the Days"
+      title: "Articles of the Day"
     choose: "Choose..."
     status: "Status:"
     yes: Yes
@@ -24,6 +24,8 @@ plugin:
     height: "Image height (in pixels)"
     rendition: "Rendition type"
     showfrom: "Show articles of the day from:"
+    earliest: "Earliest month"
+    latest: "Latest month"
   msg:
     success: "Successfully set."
     notset: "not set."

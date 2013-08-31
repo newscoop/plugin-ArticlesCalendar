@@ -69,6 +69,18 @@ class Settings
     private $publicationNumbers;
 
     /**
+     * @ORM\Column(type="datetime", name="earliestMonth")
+     * @var datetime
+     */
+    private $earliestMonth;
+
+    /**
+     * @ORM\Column(type="string", name="latestMonth")
+     * @var string
+     */
+    private $latestMonth;
+
+    /**
      * @ORM\Column(type="text", name="styles", nullable=true)
      * @var text
      */
@@ -76,9 +88,15 @@ class Settings
 
     /**
      * @ORM\Column(type="datetime", name="created_at")
-     * @var string
+     * @var datetime
      */
     private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime", name="last_modified")
+     * @var datetime
+     */
+    private $last_modified;
 
     /**
      * @ORM\Column(type="boolean", name="is_active")
@@ -263,6 +281,52 @@ class Settings
     }
 
     /**
+     * Get earliestMonth
+     *
+     * @return int
+     */
+    public function getEarliestMonth()
+    {
+        return $this->earliestMonth;
+    }
+
+    /**
+     * Set earliestMonth
+     *
+     * @param  datetime $earliestMonth
+     * @return datetime
+     */
+    public function setEarliestMonth(\DateTime $earliestMonth)
+    {
+        $this->earliestMonth = $earliestMonth;
+        
+        return $earliestMonth;
+    }
+
+    /**
+     * Get latestMonth
+     *
+     * @return datetime
+     */
+    public function getLatestMonth()
+    {
+        return $this->latestMonth;
+    }
+
+    /**
+     * Set latestMonth
+     *
+     * @param  string $latestMonth
+     * @return string
+     */
+    public function setLatestMonth($latestMonth)
+    {
+        $this->latestMonth = $latestMonth;
+        
+        return $latestMonth;
+    }
+
+    /**
      * Get styles
      *
      * @return text
@@ -327,6 +391,29 @@ class Settings
     public function setCreatedAt(\DateTime $created_at)
     {
         $this->created_at = $created_at;
+        
+        return $this;
+    }
+
+    /**
+     * Get last modified date
+     *
+     * @return datetime
+     */
+    public function getLastModified()
+    {
+        return $this->last_modified;
+    }
+
+    /**
+     * Set last modified date
+     *
+     * @param datetime $last_modified
+     * @return datetime
+     */
+    public function setLastModified(\DateTime $last_modified)
+    {
+        $this->last_modified = $last_modified;
         
         return $this;
     }

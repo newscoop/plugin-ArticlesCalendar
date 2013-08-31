@@ -16,8 +16,3 @@ services:
         class: Newscoop\ArticlesCalendarBundle\EventListener\ConfigureMenuListener
         tags:
           - { name: kernel.event_listener, event: newscoop_newscoop.menu_configure, method: onMenuConfigure }
-
-    newscoop_articles_calendar.form.type.settingsform:
-        class: Newscoop\ArticlesCalendarBundle\Form\Type\SettingsType
-        tags:
-            - { name: form.type, alias: settingsform }

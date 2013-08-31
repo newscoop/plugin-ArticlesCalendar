@@ -26,14 +26,25 @@ class AdminController extends Controller
     public function adminAction(Request $request)
     {  
         $em = $this->container->get('em');
-        $insert = false;
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
         ));
+        
+        $query = "";
+        $publicationNumbers = explode(',', $settings->getPublicationNumbers());
+        foreach($publicationNumbers as $value) {
+            $query .= 'p.id = '. $value .' OR ';
+        }
 
-        if (!$settings) {
-            $insert = true;
-            $settings = new Settings();
+        $publications = $em->getRepository('Newscoop\Entity\Publication')
+            ->createQueryBuilder('p')
+            ->where(substr($query, 0, -4))
+            ->getQuery()
+            ->getResult();
+
+        $publicationsArray = array();
+        foreach ($publications as $publication) {
+            $publicationsArray[] = $publication->getId();
         }
 
         $form = $this->container->get('form.factory')->create(new SettingsType(), array(
@@ -43,23 +54,31 @@ class AdminController extends Controller
             'imageWidth' => $settings->getImageWidth(),
             'imageHeight' => $settings->getImageHeight(),
             'rendition' => $settings->getRendition(),
+            'publicationNumbers' => $publicationsArray,
+            'earliestMonth' => $settings->getEarliestMonth(),
+            'latestMonth' => $settings->getLatestMonth() == 'current' ? date('m') : $settings->getLatestMonth(),
         ), array());
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
                 $data = $form->getData();
-                if ($insert) {
-                    $em->persist($settings);
-                }
-                
                 $settings->setFirstDay($data['firstDay']);
                 $settings->setShowDayNames($data['showDayNames']);
                 $settings->setNavigation($data['navigation']);
                 $settings->setImageWidth($data['imageWidth']);
                 $settings->setImageHeight($data['imageHeight']);
                 $settings->setRendition($data['rendition']);
-                $settings->setPublicationNumbers(implode($data['publicationNumbers']));
+                $settings->setEarliestMonth($data['earliestMonth']);
+                $settings->setCreatedAt(new \Datetime("now"));
+
+                if ($data['latestMonth']+1 == date('m')) {
+                    $settings->setLatestMonth('current');
+                } else {
+                    $settings->setLatestMonth($data['latestMonth']+1);
+                }
+
+                $settings->setPublicationNumbers(implode(',', $data['publicationNumbers']));
 
                 $em->flush();
             }
@@ -68,7 +87,7 @@ class AdminController extends Controller
         return array(
             'form' => $form->createView(),
             'styles' => $settings->getStyles(),
-            'lastModified' => $settings->getCreatedAt(),
+            'lastModified' => $settings->getLastModified(),
         );
     }
 
@@ -84,7 +103,7 @@ class AdminController extends Controller
             ));
 
             $settings->setStyles($request->get('styles'));
-            $settings->setCreatedAt(new \Datetime($request->get('lastModified')));
+            $settings->setLastModified(new \Datetime($request->get('lastModified')));
             $em->flush();
         } catch (\Exception $e) {
             return new Response(json_encode(array('status' => false)));

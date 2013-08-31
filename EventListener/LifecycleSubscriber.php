@@ -32,6 +32,20 @@ class LifecycleSubscriber implements EventSubscriberInterface
         // Generate proxies for entities
         $this->em->getProxyFactory()->generateProxyClasses($this->getClasses(), __DIR__ . '/../../../../library/Proxy');
 
+        $publications = $this->em->getRepository('Newscoop\Entity\Publication')
+            ->createQueryBuilder('p')
+            ->select('p.id')
+            ->getQuery()
+            ->getArrayResult();
+
+        $earliestDate = $this->em->getRepository('Newscoop\Entity\Article')
+            ->createQueryBuilder('a')
+            ->where('a.workflowStatus = \'Y\'')
+            ->orderBy('a.published', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult();
+
         $settings = new Settings();
         $settings->setFirstDay(1);
         $settings->setNavigation(true);
@@ -40,9 +54,12 @@ class LifecycleSubscriber implements EventSubscriberInterface
         $settings->setImageWidth(0);
         $settings->setImageHeight(0);
         $settings->setStyles('/* Some custom CSS */');
+        $settings->setEarliestMonth($earliestDate->getPublishDate());
+        $settings->setLatestMonth('current');
         $settings->setIsActive(true);
-        $settings->setPublicationNumbers('2');
+        $settings->setPublicationNumbers(implode(',', array_map('array_pop', $publications)));
         $settings->setCreatedAt(new \DateTime('now'));
+        $settings->setLastModified(new \DateTime('now'));
         $this->em->persist($settings);
         $this->em->flush();
     }
