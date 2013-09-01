@@ -38,7 +38,7 @@ class SettingsType extends AbstractType
         $builder
         ->add('firstDay', 'integer', array(
             'label' => 'plugin.label.firstday',
-            'attr' => array('min'=>'1'),
+            'attr' => array('min'=>'1', 'max' => '31'),
             'error_bubbling' => true,
             'required' => true
         ))
@@ -60,16 +60,27 @@ class SettingsType extends AbstractType
             'attr' => array('min'=>'0'),
             'required' => false
         ))
+        ->add('latestMonth', 'choice', array(
+            'label' => 'plugin.label.latest',
+            'choices' => range(1,12),
+        ))
+        ->add('earliestMonth', 'date', array(
+            'label' => 'plugin.label.earliest',
+            'widget' => 'choice',
+            'format' => 'd-M-yyyy',
+            'years' => range(date('Y'), date('Y')-12),
+            'empty_value' => array('day' => false)
+        ))
         ->add('rendition', 'choice', array(
             'choices' => $renditionsArray,
             'label' => 'plugin.label.rendition',
             'required' => true
         ))
         ->add('publicationNumbers', 'choice', array(
-            'choices'   => $publicationsArray,
+            'choices' => $publicationsArray,
             'label' => 'plugin.label.showfrom',
-            'multiple'  => true,
-            'required' => false
+            'multiple' => true,
+            'required' => true
         ));
     }
 

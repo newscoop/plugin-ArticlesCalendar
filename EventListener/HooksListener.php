@@ -1,4 +1,11 @@
 <?php
+/**
+ * @package Newscoop\ArticlesCalendarBundle
+ * @author Rafał Muszyński <rafal.muszynski@sourcefabric.org>
+ * @author Paweł Mikołajczuk <pawel.mikolajczuk@sourcefabric.org>
+ * @copyright 2013 Sourcefabric o.p.s.
+ * @license http://www.gnu.org/licenses/gpl-3.0.txt
+ */
 
 namespace Newscoop\ArticlesCalendarBundle\EventListener;
 
@@ -47,16 +54,15 @@ class HooksListener
             $status = true;
             $articleOfTheDayDate = $articleOfTheDay->getDate(); 
 
-            $string = "";
-            foreach(str_split($articleOfTheDay->getPublicationNumbers()) as $value) {
-                if (strpos($articleOfTheDay->getPublicationNumbers(), $value) !== false) {
-                    $string .= 'p.id = '.$value.' OR ';
-                }
+            $query = "";
+            $publicationNumbers = explode(',', $articleOfTheDay->getPublicationNumbers());
+            foreach($publicationNumbers as $value) {
+                $query .= 'p.id = '. $value .' OR ';
             }
 
             $publications = $em->getRepository('Newscoop\Entity\Publication')
                 ->createQueryBuilder('p')
-                ->where(substr($string, 0, -4))
+                ->where(substr($query, 0, -4))
                 ->getQuery()
                 ->getResult();
 
@@ -70,7 +76,7 @@ class HooksListener
             'articleId' => $article->getNumber(),
             'articleLanguageId' => $article->getLanguageId(),
             'publicationId' => $article->getPublicationId(),
-            'publicationNumbers' => explode(',', $article->getPublicationId())
+            'publicationNumbers' => !$articleOfTheDay ? explode(',', $article->getPublicationId()) : $publicationNumbers
         ), array());
 
         $response = $this->container->get('templating')->renderResponse(

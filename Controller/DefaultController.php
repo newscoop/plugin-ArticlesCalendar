@@ -29,6 +29,14 @@ class DefaultController extends Controller
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
         ));
+        
+        $response = new Response();
+        $response->setLastModified($settings->getCreatedAt());
+        $response->setPublic();
+
+        if ($response->isNotModified($request)) {
+            return $response;
+        }
 
         $firstDay = $request->get('firstDay', $settings->getFirstDay());
         $navigation = $request->get('navigation', $settings->getNavigation());
@@ -37,12 +45,13 @@ class DefaultController extends Controller
         $imageHeight = $request->get('image_height', $settings->getImageHeight());
         $publicationNumbers = $request->get('publication_numbers', $settings->getPublicationNumbers());
         $date = $request->get('date', date('Y/m/d'));
+        $latestMonth = $request->get('latestMonth', $settings->getLatestMonth());
+        $earliestMonth = $request->get('earliestMonth', $settings->getEarliestMonth());
         $styles = $settings->getStyles();
 
         $date = explode('/', $date);
         $today = explode('/', date('Y/m/d'));
         $view = 'month';
-        $latestMonth = 'current';
 
         if (isset($date[0])) {
             $year = $date[0];
@@ -57,28 +66,22 @@ class DefaultController extends Controller
         }
 
         $now = new \DateTime("$today[0]-$today[1]");
-
-        $datetime = new \DateTime();
-        $datetime->modify('-12 months');
-        $earliestMonth = $datetime->format('Y/m');
+        $earliestMonth = date(''.intval($earliestMonth->format('Y')).'/'.intval($earliestMonth->format('m')).'/d');
         if (isset($earliestMonth) && $earliestMonth == 'current') {
             $earliestMonth = $today;
         } else if (isset($earliestMonth)) {
             $earliestMonth = explode('/', $earliestMonth);
             $tmp_earliest = new \DateTime("$earliestMonth[0]-$earliestMonth[1]");
 
-            if ($tmp_earliest > $now) {
-                $earliestMonth = $today;
-            }
         } else {
             $earliestMonth = null;
         }
 
-        $latestMonth = $request->get('latestMonth', null);
         if (isset($latestMonth) && $latestMonth == 'current') {
             $latestMonth = $today;
         } else if (isset($latestMonth)) {
-            $latestMonth = explode('/', $latestMonth);
+            $month = $latestMonth-1;
+            $latestMonth = explode('/',date('Y/'.$latestMonth.'/d'));
             $tmp_latest = new \DateTime("$latestMonth[0]-$latestMonth[1]");
 
             if ($now > $tmp_latest) {
@@ -88,7 +91,24 @@ class DefaultController extends Controller
             $latestMonth = null;
         }
 
-        $locale = $request->getPreferredLanguage();
+        $attributes = $request->attributes->get('_newscoop_publication_metadata');
+        $val = array();
+        $key = 'id_default_language';
+
+        array_walk_recursive($attributes, function($value, $index) use($key, &$val){
+            if($index == $key) {
+                array_push($val, $value);
+            } 
+        });
+
+        $language = $em->getRepository('Newscoop\Entity\Language')
+            ->createQueryBuilder('l')
+            ->where('l.id = :languageId')
+            ->setParameter('languageId', count($val) > 1 ? 1 : array_pop($val))
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $locale = $language->getCode();
 
         $dateFormatter['month'] = \IntlDateFormatter::create(
             $locale,
@@ -118,9 +138,9 @@ class DefaultController extends Controller
             $days[] = $dateFormatter['dayName']->format(strtotime("Sunday +$i days"));
         }
 
-        return array(
+        $response->setContent($this->container->get('templating')->render('NewscoopArticlesCalendarBundle:Default:widget.html.twig' ,array(
             'randomInt' => md5(uniqid('', true)),
-            'today' => explode('/', date('Y/m/d')),
+            'today' => $today,
             'year' => $year,
             'month' => $month,
             'day' => $day,
@@ -135,7 +155,11 @@ class DefaultController extends Controller
             'styles' => $styles,
             'months' => $months,
             'days' => $days,
-        );
+        )));
+
+        $response->headers->set('Content-Type', 'text/html');
+
+        return $response;
     }
 
     /**
@@ -160,29 +184,25 @@ class DefaultController extends Controller
             return $response;
         }
 
-        $publicationNumbers = $request->get('publication_numbers');
-
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
         ));
 
-        $currentPublication = $request->get('currentPublication', $settings->getPublicationNumbers());
+        $publicationNumbers = explode(',', $request->get('publication_numbers', $settings->getPublicationNumbers()));
         $renditionName = $request->get('renditionName', $settings->getRendition());
         $imageWidth = $request->get('image_width', $settings->getImageWidth());
         $imageHeight = $request->get('image_height', $settings->getImageHeight());
 
-        $string = "";
-        foreach(str_split($currentPublication) as $value) {
-            if (strpos($currentPublication, $value) !== false) {
-                $string .= 'a.publicationNumbers LIKE \'%'.$value.'%\' OR ';
-            }
+        $query = "";
+        $publicationNumbers = explode(',', $settings->getPublicationNumbers());
+        foreach($publicationNumbers as $value) {
+            $query .= "a.publicationNumbers LIKE '%\\". $value ."%' OR ";
         }
 
         $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
             ->where('a.is_active = true')
-            ->andWhere($string.'a.publicationNumbers = :id')
-            ->setParameter('id', $currentPublication)
+            ->andWhere(substr($query, 0, -4))
             ->getQuery()
             ->getResult();
 
@@ -230,6 +250,7 @@ class DefaultController extends Controller
         $form = $this->container->get('form.factory')->create(new ArticleOfTheDayType(), array(), array());
         $status = false;
         $success = false;
+        $numbers = "";
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -272,13 +293,14 @@ class DefaultController extends Controller
                 if ($articleOfTheDay) {
         
                     foreach ($oldArticles as $old) {
-                            $old->setIsActive(false);
+                        $old->setIsActive(false);
                     }
 
                     $success = true;
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setCreatedAt(new \DateTime());
-                    $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
+
+                    $articleOfTheDay->setPublicationNumbers(implode(',', $data['publicationNumbers']));
                     $articleOfTheDay->setIsActive(true);
 
                 } else {
@@ -295,7 +317,7 @@ class DefaultController extends Controller
                     $articleOfTheDay->setDate(new \DateTime($data['custom_date']));
                     $articleOfTheDay->setArticle($article);
                     $articleOfTheDay->setPublicationId($data['publicationId']);
-                    $articleOfTheDay->setPublicationNumbers(implode($data['publicationNumbers']));
+                    $articleOfTheDay->setPublicationNumbers(implode(',', $data['publicationNumbers']));
                     $em->persist($articleOfTheDay);
                 }
 
@@ -318,17 +340,17 @@ class DefaultController extends Controller
      * @return array
      */
     private function returnData($article, $form, $status, $success, $articleOfTheDay) {
+
         $em = $this->container->get('em');
-        $string = "";
-        foreach(str_split($articleOfTheDay->getPublicationNumbers()) as $value) {
-            if (strpos($articleOfTheDay->getPublicationNumbers(), $value) !== false) {
-                $string .= 'p.id = '.$value.' OR ';
-            }
+        $query = "";
+        $publicationNumbers = explode(',', $articleOfTheDay->getPublicationNumbers());
+        foreach($publicationNumbers as $value) {
+            $query .= 'p.id = '. $value .' OR ';
         }
 
         $publications = $em->getRepository('Newscoop\Entity\Publication')
             ->createQueryBuilder('p')
-            ->where(substr($string, 0, -4))
+            ->where(substr($query, 0, -4))
             ->getQuery()
             ->getResult();
 
