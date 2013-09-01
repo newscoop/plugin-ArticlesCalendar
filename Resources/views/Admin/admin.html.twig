@@ -8,12 +8,13 @@
 <link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/css/codemirror.css">
 <link rel="stylesheet" href="{{ Newscoop['WEBSITE_URL'] }}/bundles/newscooparticlescalendar/css/bootstrap.min.css">
 <style>
-.CodeMirror {background: none;margin: 2px; width: 840px; height: 577px;border: 1px solid #C0C0C0;}
+.CodeMirror {background: none;margin: 2px; width: 840px; height: 644px;border: 1px solid #C0C0C0;}
 #settingsTable {float: left; margin-top: 0px; margin-right: 25px;}
 .input_select, .input_text {width: 250px;}
 .input_select_earliest_month {width: 120px;float: left;margin-right: 8px;}
 .input_select_earliest_year {width: 120px;}
 .article-of-the-day-last {float: right;font-size: 10px;margin-right: 5px;line-height: 20px;}
+.article-of-the-day-bg {background-color: #ECECEC;}
 </style>
 {% endblock %}
 {% block admin_scripts %}
@@ -92,7 +93,20 @@ $(document).ready(function() {
             </tr>
             <tr>
                 <td align="left" valign="top">
-                    {{ form_widget(form.latestMonth, {'attr' : {'class' : 'form-control input-sm'}}) }}
+                    {{ form_widget(form.latestMonth.day, {'attr' : {'style' : 'display:none'}}) }}
+                    {{ form_widget(form.latestMonth.month, {'attr' : {'class' : 'form-control input-sm input_select_earliest_month'}}) }} 
+                    {{ form_widget(form.latestMonth.year, {'attr' : {'class' : 'form-control input-sm input_select_earliest_year'}}) }}
+                </td>
+            </tr>
+            <tr class="article-of-the-day-bg">
+                <td align="left" style="width: 50px;">   
+                    {{ form_label(form.currentMonth) }}
+                    <small>({{ 'plugin.label.currentmsg'|trans }})</small>
+                </td>
+            </tr>
+            <tr class="article-of-the-day-bg">
+                <td align="left" valign="top">
+                    {{ form_widget(form.currentMonth) }}
                 </td>
             </tr>
             <tr>
@@ -135,27 +149,27 @@ $(document).ready(function() {
                     {{ form_widget(form.navigation, {'attr' : {'class' : 'input_check'}}) }}
                 </td>
             </tr>
-            <tr>
+            <tr class="article-of-the-day-bg">
                 <td align="left">
                     <strong>{{ 'plugin.label.optional'|trans }}</strong>    
                 </td>
             </tr>
-            <tr>
+            <tr class="article-of-the-day-bg">
                 <td align="left">
                     {{ form_label(form.imageWidth) }}    
                 </td>
             </tr>
-            <tr>
+            <tr class="article-of-the-day-bg">
                 <td align="left" valign="top">
                     {{ form_widget(form.imageWidth, {'attr' : {'class' : 'form-control input-sm'}}) }}
                 </td>
             </tr>
-            <tr>
+            <tr class="article-of-the-day-bg">
                 <td align="left">
                     {{ form_label(form.imageHeight) }}    
                 </td>
             </tr>
-            <tr>
+            <tr class="article-of-the-day-bg">
                 <td align="left" valign="top">
                     {{ form_widget(form.imageHeight, {'attr' : {'class' : 'form-control input-sm'}}) }}
                 </td>

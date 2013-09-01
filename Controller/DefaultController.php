@@ -49,6 +49,10 @@ class DefaultController extends Controller
         $earliestMonth = $request->get('earliestMonth', $settings->getEarliestMonth());
         $styles = $settings->getStyles();
 
+        if ($settings->getCurrentMonth()) {
+            $latestMonth = 'current';
+        }
+
         $date = explode('/', $date);
         $today = explode('/', date('Y/m/d'));
         $view = 'month';
@@ -80,8 +84,9 @@ class DefaultController extends Controller
         if (isset($latestMonth) && $latestMonth == 'current') {
             $latestMonth = $today;
         } else if (isset($latestMonth)) {
-            $month = $latestMonth-1;
-            $latestMonth = explode('/',date('Y/'.$latestMonth.'/d'));
+            $month = (int)$latestMonth->format('m');
+            $year = $latestMonth->format('Y');
+            $latestMonth = explode('/',date(''.$year.'/'.$month.'/d'));
             $tmp_latest = new \DateTime("$latestMonth[0]-$latestMonth[1]");
 
             if ($now > $tmp_latest) {
