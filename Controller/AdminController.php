@@ -56,7 +56,8 @@ class AdminController extends Controller
             'rendition' => $settings->getRendition(),
             'publicationNumbers' => $publicationsArray,
             'earliestMonth' => $settings->getEarliestMonth(),
-            'latestMonth' => $settings->getLatestMonth() == 'current' ? date('m') : $settings->getLatestMonth(),
+            'latestMonth' => $settings->getLatestMonth(),
+            'currentMonth' => $settings->getCurrentMonth()
         ), array());
 
         if ($request->isMethod('POST')) {
@@ -72,10 +73,12 @@ class AdminController extends Controller
                 $settings->setEarliestMonth($data['earliestMonth']);
                 $settings->setCreatedAt(new \Datetime("now"));
 
-                if ($data['latestMonth']+1 == date('m')) {
-                    $settings->setLatestMonth('current');
+                if ($data['currentMonth']) {
+                    $settings->setCurrentMonth(true);
+                    $settings->setLatestMonth(new \Datetime("now"));
                 } else {
-                    $settings->setLatestMonth($data['latestMonth']+1);
+                    $settings->setCurrentMonth(false);
+                    $settings->setLatestMonth($data['latestMonth']);
                 }
 
                 $settings->setPublicationNumbers(implode(',', $data['publicationNumbers']));

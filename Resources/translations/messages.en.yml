@@ -26,6 +26,8 @@ plugin:
     showfrom: "Show articles of the day from:"
     earliest: "Earliest month"
     latest: "Latest month"
+    currentmonth: "Set the last month as the current month?"
+    currentmsg: "When set, option above does not apply"
   msg:
     success: "Successfully set."
     notset: "not set."

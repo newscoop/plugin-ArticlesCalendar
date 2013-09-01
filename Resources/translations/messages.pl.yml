@@ -31,6 +31,8 @@ plugin:
     width: Szerokość obrazu (w pikselach)
     earliest: "Pierwszy miesiąc"
     latest: "Ostatni miesiąc"
+    currentmonth: "Ustawić ostatni miesiąc jako bieżący miesiąc?"
+    currentmsg: "Jeśli zaznaczone, powyższa opcja nie jest brana pod uwagę"
   msg:
     error: Nie można zapisać CSS.
     notset: nie ustawiony.

@@ -75,10 +75,16 @@ class Settings
     private $earliestMonth;
 
     /**
-     * @ORM\Column(type="string", name="latestMonth")
+     * @ORM\Column(type="datetime", name="latestMonth")
      * @var string
      */
     private $latestMonth;
+
+    /**
+     * @ORM\Column(type="boolean", name="currentMonth")
+     * @var bool
+     */
+    private $currentMonth;
 
     /**
      * @ORM\Column(type="text", name="styles", nullable=true)
@@ -316,14 +322,37 @@ class Settings
     /**
      * Set latestMonth
      *
-     * @param  string $latestMonth
-     * @return string
+     * @param  datetime $latestMonth
+     * @return datetime
      */
-    public function setLatestMonth($latestMonth)
+    public function setLatestMonth(\DateTime $latestMonth)
     {
         $this->latestMonth = $latestMonth;
         
         return $latestMonth;
+    }
+
+    /**
+     * Get current month
+     *
+     * @return bool
+     */
+    public function getCurrentMonth()
+    {
+        return $this->currentMonth;
+    }
+
+    /**
+     * Set current month
+     *
+     * @param  bool $currentMonth
+     * @return bool
+     */
+    public function setCurrentMonth($currentMonth)
+    {
+        $this->currentMonth = $currentMonth;
+        
+        return $this;
     }
 
     /**
