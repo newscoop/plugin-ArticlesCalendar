@@ -60,9 +60,16 @@ class SettingsType extends AbstractType
             'attr' => array('min'=>'0'),
             'required' => false
         ))
-        ->add('latestMonth', 'choice', array(
+        ->add('latestMonth', 'date', array(
             'label' => 'plugin.label.latest',
-            'choices' => range(1,12),
+            'widget' => 'choice',
+            'format' => 'd-M-yyyy',
+            'years' => range(date('Y'), date('Y')-12),
+            'empty_value' => array('day' => false)
+        ))
+        ->add('currentMonth', 'checkbox', array(
+            'label' => 'plugin.label.currentmonth',
+            'required' => false
         ))
         ->add('earliestMonth', 'date', array(
             'label' => 'plugin.label.earliest',
