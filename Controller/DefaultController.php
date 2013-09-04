@@ -49,12 +49,7 @@ class DefaultController extends Controller
         $earliestMonth = $request->get('earliestMonth', $settings->getEarliestMonth());
         $currentMonth = $request->get('currentMonth', $settings->getCurrentMonth());
         $styles = $settings->getStyles();
-
         
-        if (is_string($date)) {
-            $date = date($date);
-        }
-
         if (is_string($earliestMonth)) {
             $earliestMonth = new \DateTime($earliestMonth);
         }
