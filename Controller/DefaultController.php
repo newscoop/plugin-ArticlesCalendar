@@ -47,10 +47,33 @@ class DefaultController extends Controller
         $date = $request->get('date', date('Y/m/d'));
         $latestMonth = $request->get('latestMonth', $settings->getLatestMonth());
         $earliestMonth = $request->get('earliestMonth', $settings->getEarliestMonth());
+        $currentMonth = $request->get('currentMonth', $settings->getCurrentMonth());
         $styles = $settings->getStyles();
 
-        if ($settings->getCurrentMonth()) {
-            $latestMonth = 'current';
+        
+        if (is_string($date)) {
+            $date = date($date);
+        }
+
+        if (is_string($earliestMonth)) {
+            $earliestMonth = new \DateTime($earliestMonth);
+        }
+        
+        if (is_string($currentMonth)) {
+            $currentMonth = $currentMonth === 'false' ? false : true;
+        }
+
+        if ($currentMonth) {
+            if ($latestMonth != 'current' && is_string($latestMonth)) {
+                $latestMonth = new \DateTime($latestMonth);
+            }
+        } else {
+            if (is_string($latestMonth)){
+                $latestMonth = new \DateTime($latestMonth);
+            } else {
+                $latestMonth = new \DateTime("now");
+            }
+
         }
 
         $date = explode('/', $date);
@@ -160,6 +183,7 @@ class DefaultController extends Controller
             'styles' => $styles,
             'months' => $months,
             'days' => $days,
+            'publication_numbers' => $publicationNumbers,
         )));
 
         $response->headers->set('Content-Type', 'text/html');
@@ -199,7 +223,6 @@ class DefaultController extends Controller
         $imageHeight = $request->get('image_height', $settings->getImageHeight());
 
         $query = "";
-        $publicationNumbers = explode(',', $settings->getPublicationNumbers());
         foreach($publicationNumbers as $value) {
             $query .= "a.publicationNumbers LIKE '%\\". $value ."%' OR ";
         }

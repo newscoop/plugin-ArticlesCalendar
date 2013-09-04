@@ -41,7 +41,7 @@ function getArticlesOfTheDay( start, end, callback )
     $.ajax({
       url: "{{ Newscoop['WEBSITE_URL'] }}/plugin/articlescalendar/articlesoftheday/get",
       type: "GET",
-      data: {"format": "json", "start": search_start, "end": search_end, "image_width": {{ image_width }}, "image_height":{{image_height }} },
+      data: {"format": "json", "start": search_start, "end": search_end, "image_width": {{ image_width }}, "image_height":{{image_height }}, "publication_numbers": {{ publication_numbers }} },
       dataType: "json"
     }).done(function(data) {
       callback(data.articles);
