@@ -49,7 +49,7 @@ class DefaultController extends Controller
         $earliestMonth = $request->get('earliestMonth', $settings->getEarliestMonth());
         $currentMonth = $request->get('currentMonth', $settings->getCurrentMonth());
         $styles = $settings->getStyles();
-        
+
         if (is_string($earliestMonth)) {
             $earliestMonth = new \DateTime($earliestMonth);
         }
@@ -102,7 +102,7 @@ class DefaultController extends Controller
         if (isset($latestMonth) && $latestMonth == 'current') {
             $latestMonth = $today;
         } else if (isset($latestMonth)) {
-            $month = (int)$latestMonth->format('m');
+            $month = (int)$latestMonth->format('m')-1;
             $year = $latestMonth->format('Y');
             $latestMonth = explode('/',date(''.$year.'/'.$month.'/d'));
             $tmp_latest = new \DateTime("$latestMonth[0]-$latestMonth[1]");
