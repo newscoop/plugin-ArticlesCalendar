@@ -54,19 +54,29 @@ class DefaultController extends Controller
             $earliestMonth = new \DateTime($earliestMonth);
         }
         
+        $tmp_current = 'false';
         if (is_string($currentMonth)) {
+            $tmp_current = $currentMonth;
             $currentMonth = $currentMonth === 'false' ? false : true;
+            
         }
 
         if ($currentMonth) {
-            if ($latestMonth != 'current' && is_string($latestMonth)) {
+            if (is_string($latestMonth)) {
                 $latestMonth = new \DateTime($latestMonth);
+            } else {
+                $latestMonth = 'current';
             }
+
+            if ($tmp_current == 'true') {
+                $latestMonth = 'current';
+            }
+
         } else {
             if (is_string($latestMonth)){
                 $latestMonth = new \DateTime($latestMonth);
             } else {
-                $latestMonth = new \DateTime("now");
+                $latestMonth = $settings->getLatestMonth();
             }
 
         }
@@ -102,13 +112,14 @@ class DefaultController extends Controller
         if (isset($latestMonth) && $latestMonth == 'current') {
             $latestMonth = $today;
         } else if (isset($latestMonth)) {
-            $month = (int)$latestMonth->format('m')-1;
-            $year = $latestMonth->format('Y');
-            $latestMonth = explode('/',date(''.$year.'/'.$month.'/d'));
+            $month = $today[1]-1;
+            $year = $today[0];
+            $latestMonth = explode('/',date($latestMonth->format('Y/m/d')));
             $tmp_latest = new \DateTime("$latestMonth[0]-$latestMonth[1]");
 
             if ($now > $tmp_latest) {
-                $latestMonth = $today;
+                $month = (int)$latestMonth[1]-1;
+                $year = $latestMonth[0];
             }
         } else {
             $latestMonth = null;
