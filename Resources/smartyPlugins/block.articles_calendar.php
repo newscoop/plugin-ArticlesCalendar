@@ -39,13 +39,6 @@ function smarty_block_articles_calendar($params, $p_content, &$smarty, &$p_repea
         $.ajax({
             type: 'POST',
             url: '/plugin/articlescalendar/widget',
-            data: {
-              'publication_numbers': '2',
-              'navigation': false,
-              'firstDay': 2,
-              'showDayNames': false,
-              //'earliestMonth': ''
-          },
             dataType: 'html',
             success: function(msg){
                 $('.js-articles-calndar-widget-container').html(msg);
