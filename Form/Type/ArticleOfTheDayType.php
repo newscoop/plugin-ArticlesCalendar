@@ -45,7 +45,7 @@ class ArticleOfTheDayType extends AbstractType
         ))
         ->add('custom_date', 'text', array(
             'required' => true,
-            'attr' => array('class' => 'datepicker'),
+            'attr' => array('class' => 'datepicker input_text'),
             'label' => ''
         ));
     }

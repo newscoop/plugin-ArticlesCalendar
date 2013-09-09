@@ -50,6 +50,14 @@ class DefaultController extends Controller
         $currentMonth = $request->get('currentMonth', $settings->getCurrentMonth());
         $styles = $settings->getStyles();
 
+        if (is_string($navigation)) {
+            $navigation = $navigation === 'false' ? false : true;
+        }
+
+        if (is_string($showDayNames)) {
+            $showDayNames = $showDayNames === 'false' ? false : true;
+        }
+
         if (is_string($earliestMonth)) {
             $earliestMonth = new \DateTime($earliestMonth);
         }
@@ -126,19 +134,10 @@ class DefaultController extends Controller
         }
 
         $attributes = $request->attributes->get('_newscoop_publication_metadata');
-        $val = array();
-        $key = 'id_default_language';
-
-        array_walk_recursive($attributes, function($value, $index) use($key, &$val){
-            if($index == $key) {
-                array_push($val, $value);
-            } 
-        });
-
         $language = $em->getRepository('Newscoop\Entity\Language')
             ->createQueryBuilder('l')
             ->where('l.id = :languageId')
-            ->setParameter('languageId', count($val) > 1 ? 1 : array_pop($val))
+            ->setParameter('languageId', $attributes['publication']['id_default_language'])
             ->getQuery()
             ->getOneOrNullResult();
 
@@ -285,7 +284,7 @@ class DefaultController extends Controller
         $status = false;
         $success = false;
         $numbers = "";
-
+        $attributes = $request->attributes->get('_newscoop_publication_metadata');
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
 
@@ -312,7 +311,8 @@ class DefaultController extends Controller
                 ));   
 
                 $oldArticles = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')->findBy(array(
-                    'date' => new \DateTime($data['custom_date'])
+                    'date' => new \DateTime($data['custom_date']),
+                    'publicationId' => $attributes['alias']['publication_id'],
                 ));
 
                 if ($request->get('_route') === "newscoop_articlescalendar_default_unmark") {

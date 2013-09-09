@@ -50,7 +50,7 @@ $(document).ready(function() {
         {{ form_row(form.articleLanguageId) }}
         {{ form_row(form.publicationId) }}
         <h4>{{ 'plugin.label.choosedate'|trans }}</h4>
-        {{ form_widget(form.custom_date) }}
+        {{ form_widget(form.custom_date, {'attr' : {'style' : 'width: 173px;'}}) }}<br>
         <h4>{{ 'plugin.label.choosepublication'|trans }}</h4>
         {{ form_widget(form.publicationNumbers, {'attr' : {'style' : 'width: 175px'}}) }}
         {{ form_rest(form) }}
