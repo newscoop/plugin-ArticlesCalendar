@@ -11,7 +11,7 @@ plugin:
     change: Änderung
     choose: Auswählen...
     choosedate: "Datum auswählen:"
-    choosepublication: "Publikation auswählen:'
+    choosepublication: "Publikation auswählen:"
     css: "CSS hinzufügen, um Kalender Widget anzupassen:"
     currentmonth: "Den letzten Monat als aktuellen Monat festlegen?"
     currentmsg: "Wenn eingestellt, ist die obige Option nicht anwendbar."
