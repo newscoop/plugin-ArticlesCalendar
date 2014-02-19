@@ -1,0 +1,42 @@
+Plugins: Plugins
+plugin:
+  btn:
+    next: Nächster Monat
+    prev: Vorheriger Monat
+    save: Sichern
+    unmark: Markierung aufheben
+  label:
+    calendar:
+      title: Artikel des Tages
+    change: Änderung
+    choose: Auswählen...
+    choosedate: "Datum auswählen:"
+    choosepublication: "Publikation auswählen:"
+    css: "CSS hinzufügen, um Kalender Widget anzupassen:"
+    currentmonth: "Den letzten Monat als aktuellen Monat festlegen?"
+    currentmsg: "Wenn eingestellt, ist die obige Option nicht anwendbar."
+    date: "Datum:"
+    earliest: Frühester Monat
+    no: Nein
+    firstday: Erster Tag
+    height: Bildhöhe (in Pixel)
+    latest: Spätester Monat
+    modified: "Zuletzt geändert:"
+    none: kein.
+    optional: "Optional:"
+    rendition: Darstellungsart
+    settings: Einstellungen
+    showdays: Wochentage anzeigen?
+    showfrom: "Artikel des Tages anzeigen vom:"
+    shownav: Navigation anzeigen?
+    status: "Status:"
+    title: Artikel des Tages Kalender Plugin
+    yes: Ja
+    visible: "Sichtbar in:"
+    width: Bildbreite (in Pixel)
+  msg:
+    error: Stylesheet konnte nicht gespeichert werden.
+    notset: nicht eingestellt.
+    saved: Erfolgreich gespeichert.
+    success: Erfolgreich eingestellt.
+    unmarked: Artikel erfolgreich unmarkiert.
