@@ -200,8 +200,8 @@ class DefaultController extends Controller
     * @Route("/plugin/articlescalendar/articlesoftheday/get")
     */
     public function getArticlesOfTheDayAction(Request $request)
-    {   
-       try { $em = $this->container->get('em');
+    {
+        $em = $this->container->get('em');
         $lastArticleOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
             ->where('a.is_active = true')
@@ -209,7 +209,7 @@ class DefaultController extends Controller
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
-        
+
         $response = new Response();
         $response->setLastModified($lastArticleOfTheDay->getCreatedAt());
         $response->setPublic();
