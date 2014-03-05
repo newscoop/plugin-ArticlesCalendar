@@ -200,7 +200,7 @@ class DefaultController extends Controller
     * @Route("/plugin/articlescalendar/articlesoftheday/get")
     */
     public function getArticlesOfTheDayAction(Request $request)
-    {   
+    {
         $em = $this->container->get('em');
         $lastArticleOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
             ->createQueryBuilder('a')
@@ -209,7 +209,7 @@ class DefaultController extends Controller
             ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
-        
+
         $response = new Response();
         $response->setLastModified($lastArticleOfTheDay->getCreatedAt());
         $response->setPublic();
@@ -226,34 +226,44 @@ class DefaultController extends Controller
         $renditionName = $request->get('renditionName', $settings->getRendition());
         $imageWidth = $request->get('image_width', $settings->getImageWidth());
         $imageHeight = $request->get('image_height', $settings->getImageHeight());
+        $start = $request->get('start');
+        $end = $request->get('end');
 
         $query = "";
         foreach($publicationNumbers as $value) {
-            $query .= "a.publicationNumbers LIKE '%\\". $value ."%' OR ";
+            $query .= "a.publicationNumbers LIKE '". $value ."%' OR ";
         }
 
-        $articlesOfTheDay = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
-            ->createQueryBuilder('a')
+        $qb = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
+            ->createQueryBuilder('a');
+        $articlesOfTheDay =
+            $qb->select('a.articleNumber', 'a.publicationId', 'a.articleLanguageId', 'a.date', 'aa.name')
+            ->leftJoin('a.article', 'aa')
             ->where('a.is_active = true')
             ->andWhere(substr($query, 0, -4))
+            ->andWhere($qb->expr()->between(
+                'a.date',
+                $qb->expr()->literal($start),
+                $qb->expr()->literal($end)
+            ))
             ->getQuery()
-            ->getResult();
+            ->getArrayResult();
 
         $results = array();
         foreach ($articlesOfTheDay as $dayArticle) {
             $element = array();
-            $articleNumber = $dayArticle->getArticle()->getNumber();
+            $articleNumber = $dayArticle['articleNumber'];
             $image = $this->container->get('image.rendition')
                 ->getArticleRenditionImage($articleNumber, $renditionName, $imageWidth ? $imageWidth : null, $imageHeight ? $imageHeight : null);
 
-            $element['title'] = $dayArticle->getArticle()->getTitle();
+            $element['title'] = $dayArticle['name'];
             if (isset($image)) {
                 $element['image'] = $this->container->get('zend_router')->assemble(array('src' => $image['src']), 'image', true, false);
             } else {
                 $element['image'] = null;
             }
 
-            $date = $dayArticle->getDate()->format('Y-m-d');
+            $date = $dayArticle['date']->format('Y-m-d');
             $date = explode(" ", $date);
             $YMD = explode("-", $date[0]);
 
@@ -262,14 +272,14 @@ class DefaultController extends Controller
                 "month" => intval($YMD[1]),
                 "day" => intval($YMD[2])
             );
-            $element['url'] = \ShortURL::GetURL($dayArticle->getArticle()->getPublicationId(), $dayArticle->getArticle()->getLanguageId(), null, null, $articleNumber);
+            $element['url'] = \ShortURL::GetURL($dayArticle['publicationId'], $dayArticle['articleLanguageId'], null, null, $articleNumber);
 
             $results[] = $element;
         }
 
         $response->setContent(json_encode(array('articles' => $results)));
         $response->headers->set('Content-Type', 'application/json');
-        
+
         return $response;
     }
 
