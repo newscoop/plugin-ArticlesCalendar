@@ -234,9 +234,9 @@ class DefaultController extends Controller
         foreach($publicationNumbers as $value) {
             $query .= "a.publicationNumbers LIKE '". $value ."%' OR ";
         }
-try {
+
         $articlesOfTheDay = $articleOfTheDayService->getArticleOfTheDay(new \DateTime($start), new \DateTime($end), $query);
-} catch (\Exception $e) {ladybug_dump($e->getMessage());die;}
+
         $results = array();
         foreach ($articlesOfTheDay as $dayArticle) {
             $element = array();
