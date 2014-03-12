@@ -18,3 +18,7 @@ services:
             - { name: kernel.event_listener, event: newscoop_newscoop.menu_configure, method: onMenuConfigure }
         arguments: 
             - @translator
+
+    newscoop_articles_calendar.articles_calendar_service:
+        class: Newscoop\ArticlesCalendarBundle\Services\ArticleOfTheDayService
+        arguments:  ["@em"]

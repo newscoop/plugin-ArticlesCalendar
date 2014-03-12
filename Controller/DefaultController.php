@@ -218,6 +218,7 @@ class DefaultController extends Controller
             return $response;
         }
 
+        $articleOfTheDayService = $this->container->get('newscoop_articles_calendar.articles_calendar_service');
         $settings = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\Settings')->findOneBy(array(
             'is_active' => true
         ));
@@ -234,20 +235,7 @@ class DefaultController extends Controller
             $query .= "a.publicationNumbers LIKE '". $value ."%' OR ";
         }
 
-        $qb = $em->getRepository('Newscoop\ArticlesCalendarBundle\Entity\ArticleOfTheDay')
-            ->createQueryBuilder('a');
-        $articlesOfTheDay =
-            $qb->select('a.articleNumber', 'a.publicationId', 'a.articleLanguageId', 'a.date', 'aa.name')
-            ->leftJoin('a.article', 'aa')
-            ->where('a.is_active = true')
-            ->andWhere(substr($query, 0, -4))
-            ->andWhere($qb->expr()->between(
-                'a.date',
-                $qb->expr()->literal($start),
-                $qb->expr()->literal($end)
-            ))
-            ->getQuery()
-            ->getArrayResult();
+        $articlesOfTheDay = $articleOfTheDayService->getArticleOfTheDay(new \DateTime($start), new \DateTime($end), $query);
 
         $results = array();
         foreach ($articlesOfTheDay as $dayArticle) {
