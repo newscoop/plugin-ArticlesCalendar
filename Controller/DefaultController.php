@@ -139,37 +139,30 @@ class DefaultController extends Controller
             ->where('l.id = :languageId')
             ->setParameter('languageId', $attributes['publication']['id_default_language'])
             ->getQuery()
-            ->getOneOrNullResult();
-
-        $locale = $language->getCode();
-
-        $dateFormatter['month'] = \IntlDateFormatter::create(
-            $locale,
-            \IntlDateFormatter::NONE,
-            \IntlDateFormatter::NONE,
-            \date_default_timezone_get(),
-            \IntlDateFormatter::GREGORIAN,
-            'MMM'
-        );
-
-        $dateFormatter['dayName'] = \IntlDateFormatter::create(
-            $locale,
-            \IntlDateFormatter::NONE,
-            \IntlDateFormatter::NONE,
-            \date_default_timezone_get(),
-            \IntlDateFormatter::GREGORIAN,
-            'EEEE'
-        );
+            ->getSingleResult();
 
         $months = array();
         $days = array();
-        for ($i=1; $i <= 12; $i++) {
-            $months[] = $dateFormatter['month']->format(new \DateTime($year."-".$i));
-        }
+        $months[] = $language->getMonth1();
+        $months[] = $language->getMonth2();
+        $months[] = $language->getMonth3();
+        $months[] = $language->getMonth4();
+        $months[] = $language->getMonth5();
+        $months[] = $language->getMonth6();
+        $months[] = $language->getMonth7();
+        $months[] = $language->getMonth8();
+        $months[] = $language->getMonth9();
+        $months[] = $language->getMonth10();
+        $months[] = $language->getMonth11();
+        $months[] = $language->getMonth12();
 
-        for ($i=0; $i <= 6; $i++) {
-            $days[] = $dateFormatter['dayName']->format(strtotime("Sunday +$i days"));
-        }
+        $days[] = $language->getDay1();
+        $days[] = $language->getDay2();
+        $days[] = $language->getDay3();
+        $days[] = $language->getDay4();
+        $days[] = $language->getDay5();
+        $days[] = $language->getDay6();
+        $days[] = $language->getDay7();
 
         $response->setContent($this->container->get('templating')->render('NewscoopArticlesCalendarBundle:Default:widget.html.twig' ,array(
             'randomInt' => md5(uniqid('', true)),
