@@ -1,42 +1,42 @@
 Plugins: Wtyczki
 plugin:
-  btn:
-    save: Zapisz
-    unmark: Odznacz
-    prev: "Poprzedni miesiąc"
-    next: "Następny miesiąc"
-  label:
-    calendar:
-      title: Artykuły dnia
-    change: Zmień
-    choose: Wybierz ...
-    choosedate: 'Wybierz datę:'
-    choosepublication: 'Wybierz gazetę:'
-    css: 'Dodaj własny CSS aby dostosować widget kalendarza:'
-    date: 'Data:'
-    no: 'Nie'
-    firstday: Pierwszy dzień
-    height: Wysokość obrazu (w pikselach)
-    modified: 'Ostatnia modyfikacja:'
-    none: nigdzie.
-    optional: 'Opcjonalnie:'
-    rendition: Rozmiary obrazka
-    settings: Ustawienia
-    showdays: Pokaż nazwy dni?
-    showfrom: 'Pokaż artykuły dni z:'
-    shownav: Pokaż nawigację?
-    status: 'Status:'
-    title: Artykuły dnia - Plugin
-    yes: Tak
-    visible: 'Widoczne w:'
-    width: Szerokość obrazu (w pikselach)
-    earliest: "Pierwszy miesiąc"
-    latest: "Ostatni miesiąc"
-    currentmonth: "Ustawić ostatni miesiąc jako bieżący miesiąc?"
-    currentmsg: "Jeśli zaznaczone, powyższa opcja nie jest brana pod uwagę"
-  msg:
-    error: Nie można zapisać CSS.
-    notset: nie ustawiony.
-    saved: Zapisano pomyślnie.
-    success: Ustawiono pomyślnie.
-    unmarked: Artykuł pomyślnie odznaczony.
+    label:
+        calendar:
+            title: 'Artykuły dnia'
+        choose: 'Wybierz ...'
+        status: 'Status:'
+        yes: Tak
+        no: Nie
+        date: 'Data:'
+        change: Zmień
+        visible: 'Widoczne w:'
+        none: nigdzie.
+        choosedate: 'Wybierz datę:'
+        choosepublication: 'Wybierz gazetę:'
+        title: 'Artykuły dnia - Plugin'
+        settings: Ustawienia
+        optional: 'Opcjonalnie:'
+        css: 'Dodaj własny CSS aby dostosować widget kalendarza:'
+        modified: 'Ostatnia modyfikacja:'
+        firstday: 'Pierwszy dzień'
+        showdays: 'Pokaż nazwy dni?'
+        shownav: 'Pokaż nawigację?'
+        width: 'Szerokość obrazu (w pikselach)'
+        height: 'Wysokość obrazu (w pikselach)'
+        rendition: 'Rozmiary obrazka'
+        showfrom: 'Pokaż artykuły dni z:'
+        earliest: 'Pierwszy miesiąc'
+        latest: 'Ostatni miesiąc'
+        currentmonth: 'Ustawić ostatni miesiąc jako bieżący miesiąc?'
+        currentmsg: 'Jeśli zaznaczone, powyższa opcja nie jest brana pod uwagę'
+    msg:
+        success: 'Ustawiono pomyślnie.'
+        notset: 'nie ustawiony.'
+        unmarked: 'Artykuł pomyślnie odznaczony.'
+        saved: 'Zapisano pomyślnie.'
+        error: 'Nie można zapisać CSS.'
+    btn:
+        unmark: Odznacz
+        save: Zapisz
+        prev: 'Poprzedni miesiąc'
+        next: 'Następny miesiąc'
