@@ -1,0 +1,42 @@
+Plugins: Plugins
+plugin:
+    label:
+        calendar:
+            title: 'Articles of the Day'
+        choose: Choose...
+        status: 'Status:'
+        yes: Yes
+        no: No
+        date: 'Date:'
+        change: Change
+        visible: 'Visible in:'
+        none: none.
+        choosedate: 'Choose date:'
+        choosepublication: 'Choose publication:'
+        title: 'Article of the Day Calendar Plugin'
+        settings: Settings
+        optional: 'Optional:'
+        css: 'Add custom CSS to customize Calendar widget:'
+        modified: 'Last modified:'
+        firstday: 'First day'
+        showdays: 'Show day names?'
+        shownav: 'Show navigation?'
+        width: 'Image width (in pixels)'
+        height: 'Image height (in pixels)'
+        rendition: 'Rendition type'
+        showfrom: 'Show articles of the day from:'
+        earliest: 'Earliest month'
+        latest: 'Latest month'
+        currentmonth: 'Set the last month as the current month?'
+        currentmsg: 'When set, option above does not apply'
+    msg:
+        success: 'Successfully set.'
+        notset: 'not set.'
+        unmarked: 'Article successfully unmarked.'
+        saved: 'Successfully saved.'
+        error: 'Could not save your stylesheet.'
+    btn:
+        unmark: Unmark
+        save: Save
+        prev: 'Previous Month'
+        next: 'Next Month'

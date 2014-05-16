@@ -1,0 +1,42 @@
+Plugins: null
+plugin:
+    label:
+        calendar:
+            title: null
+        choose: null
+        status: null
+        yes: null
+        no: null
+        date: null
+        change: null
+        visible: null
+        none: null
+        choosedate: null
+        choosepublication: null
+        title: null
+        settings: null
+        optional: null
+        css: null
+        modified: null
+        firstday: null
+        showdays: null
+        shownav: null
+        width: null
+        height: null
+        rendition: null
+        showfrom: null
+        earliest: null
+        latest: null
+        currentmonth: null
+        currentmsg: null
+    msg:
+        success: null
+        notset: null
+        unmarked: null
+        saved: null
+        error: null
+    btn:
+        unmark: null
+        save: null
+        prev: null
+        next: null
