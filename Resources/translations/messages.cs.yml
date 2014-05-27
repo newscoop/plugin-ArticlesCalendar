@@ -1,42 +1,42 @@
-Plugins: null
+Plugins: Plug-iny
 plugin:
     label:
         calendar:
-            title: null
-        choose: null
-        status: null
-        yes: null
-        no: null
-        date: null
-        change: null
-        visible: null
-        none: null
-        choosedate: null
-        choosepublication: null
-        title: null
-        settings: null
-        optional: null
-        css: null
-        modified: null
-        firstday: null
-        showdays: null
-        shownav: null
-        width: null
-        height: null
-        rendition: null
-        showfrom: null
-        earliest: null
-        latest: null
-        currentmonth: null
-        currentmsg: null
+            title: 'Dnešní články'
+        choose: Vybrat...
+        status: 'Status:'
+        yes: Ano
+        no: Ne
+        date: 'Datum:'
+        change: Změnit
+        visible: 'Viditelné v:'
+        none: žádné
+        choosedate: 'Vybrat datum:'
+        choosepublication: 'Vybrat publikaci:'
+        title: 'Plugin Kalendáře Článku Dne'
+        settings: Nastavení
+        optional: 'Volitelný:'
+        css: 'Přidat costumizovaný CSS kvůli costumizaci widgetu Kalendáře'
+        modified: 'Naposledy modifikovaný:'
+        firstday: 'První den'
+        showdays: 'Ukázat názvy dnů?'
+        shownav: 'Ukázat navigaci?'
+        width: 'Šířka obrázku (v pixlech)'
+        height: 'Výška obrázku (v pixlech)'
+        rendition: 'Typ provedení'
+        showfrom: 'Ukázat články denní formy:'
+        earliest: 'Nejdřívější měsíc'
+        latest: 'Poslední měsíc'
+        currentmonth: 'Nastavit poslední měsíc jako aktuální měsíc?'
+        currentmsg: 'Je-li nastavena, volba výše uvedená neplatí'
     msg:
-        success: null
-        notset: null
-        unmarked: null
-        saved: null
-        error: null
+        success: 'Úspěšně nastaveno.'
+        notset: nenastaveno.
+        unmarked: 'U článku úspěšně zrušeno označení.'
+        saved: 'Úspěšně uloženo.'
+        error: 'Nelze uložit váš stylesheet.'
     btn:
-        unmark: null
-        save: null
-        prev: null
-        next: null
+        unmark: Neoznačeno
+        save: Uložit
+        prev: 'Předchozí měsíc'
+        next: 'Následující měsíc'
