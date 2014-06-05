@@ -16,14 +16,14 @@ plugin:
         title: null
         settings: null
         optional: null
-        css: null
+        css: 'إضافة css لتخصيص تقويم التطبيقات المصغرة.'
         modified: null
         firstday: null
         showdays: null
         shownav: null
         width: null
         height: null
-        rendition: null
+        rendition: 'نوعية التسليم.'
         showfrom: null
         earliest: null
         latest: null
@@ -34,7 +34,7 @@ plugin:
         notset: null
         unmarked: null
         saved: null
-        error: null
+        error: 'لم يتم حفظ الأنماط الخاصه بك.'
     btn:
         unmark: null
         save: null
