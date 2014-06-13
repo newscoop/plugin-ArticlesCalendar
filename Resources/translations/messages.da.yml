@@ -1,42 +1,42 @@
-Plugins: null
+Plugins: Plugins
 plugin:
     label:
         calendar:
-            title: null
-        choose: null
-        status: null
-        yes: null
-        no: null
-        date: null
-        change: null
-        visible: null
-        none: null
-        choosedate: null
-        choosepublication: null
-        title: null
-        settings: null
-        optional: null
-        css: null
-        modified: null
-        firstday: null
-        showdays: null
-        shownav: null
-        width: null
-        height: null
-        rendition: null
-        showfrom: null
-        earliest: null
-        latest: null
-        currentmonth: null
-        currentmsg: null
+            title: 'Dagens artikler'
+        choose: Vælg...
+        status: 'Status:'
+        yes: Ja
+        no: Nej
+        date: 'Dato:'
+        change: Tilpas
+        visible: 'Synlig i:'
+        none: ingen.
+        choosedate: 'Vælg dato:'
+        choosepublication: 'Vælg publikation:'
+        title: 'Dagens Artikel kalender plugin'
+        settings: Indstillinger
+        optional: 'Valgfri:'
+        css: 'Alternativ CSS til kalender widget:'
+        modified: 'Sidst ændret:'
+        firstday: 'Første dag'
+        showdays: 'Vis dagenes navne?'
+        shownav: 'Vis navigation?'
+        width: 'Billedets bredde (i pixels)'
+        height: 'Billedets højde (i pixels)'
+        rendition: 'Gengivelses type'
+        showfrom: 'Vis dagens artikler fra:'
+        earliest: 'Tidligste måned'
+        latest: 'Seneste måned'
+        currentmonth: 'Brug denne måned som seneste måned?'
+        currentmsg: 'Ignorer ovenstående indstilling'
     msg:
-        success: null
-        notset: null
-        unmarked: null
-        saved: null
-        error: null
+        success: Indstillet.
+        notset: 'ikke indstillet.'
+        unmarked: 'Artiklen blev fravalgt.'
+        saved: Gemt.
+        error: 'Dit stylesheet kunne ikke gemmes. '
     btn:
-        unmark: null
-        save: null
-        prev: null
-        next: null
+        unmark: 'Fjern markering'
+        save: Gem
+        prev: 'Forrige måned'
+        next: 'Næste måned'
