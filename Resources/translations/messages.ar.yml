@@ -1,15 +1,15 @@
-Plugins: null
+Plugins: 'وحدات قابسة'
 plugin:
     label:
         calendar:
-            title: null
-        choose: null
-        status: null
-        yes: null
-        no: null
-        date: null
-        change: null
-        visible: null
+            title: 'مقالات اليوم'
+        choose: إختر...
+        status: 'الحالة:'
+        yes: نعم
+        no: لا
+        date: 'التاريخ:'
+        change: تغيير
+        visible: 'منظور في:'
         none: null
         choosedate: null
         choosepublication: null
