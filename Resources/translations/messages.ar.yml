@@ -9,34 +9,34 @@ plugin:
         no: لا
         date: 'التاريخ:'
         change: تغيير
-        visible: 'منظور في:'
-        none: null
-        choosedate: null
-        choosepublication: null
-        title: null
-        settings: null
-        optional: null
+        visible: 'مرئي في:'
+        none: 'لا شيئ'
+        choosedate: 'إختر التاريخ:'
+        choosepublication: 'إختر المنشور:'
+        title: 'الوحدة القابسة الخاصه بمقال اليوم.'
+        settings: الإعدادات
+        optional: 'إختياري:'
         css: 'إضافة css لتخصيص تقويم التطبيقات المصغرة.'
-        modified: null
-        firstday: null
-        showdays: null
-        shownav: null
-        width: null
-        height: null
+        modified: 'آخر تعديل'
+        firstday: 'اليوم الأول'
+        showdays: 'أظهر أسماء الأيام؟'
+        shownav: 'أظهر الملاحة؟'
+        width: 'عرض الصورة (بمقياس البكسل)'
+        height: 'إرتفاع الصورة (بمقياس البكسل)'
         rendition: 'نوعية التسليم.'
-        showfrom: null
-        earliest: null
-        latest: null
-        currentmonth: null
-        currentmsg: null
+        showfrom: 'أظهر مقالات اليوم من:'
+        earliest: 'أبكر شهر'
+        latest: 'آخر شهر'
+        currentmonth: 'حدد الشهر الأخير كالشهر الحالي؟'
+        currentmsg: 'عند التعيين، لا ينطبق الإختيار أعلاه.'
     msg:
-        success: null
-        notset: null
-        unmarked: null
-        saved: null
+        success: 'تم التعيين بنجاح.'
+        notset: 'لم يعين بعد.'
+        unmarked: 'قد أزيل إمتياز المقال بنجاح.'
+        saved: 'قد حفظ بنجاح.'
         error: 'لم يتم حفظ الأنماط الخاصه بك.'
     btn:
-        unmark: null
-        save: null
-        prev: null
-        next: null
+        unmark: 'أزل الإمتياز'
+        save: إحفظ
+        prev: 'الشهر السابق'
+        next: 'الشهر التالي'
