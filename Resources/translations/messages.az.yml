@@ -1,42 +1,42 @@
-Plugins: null
+Plugins: Plaqinlər
 plugin:
     label:
         calendar:
-            title: null
-        choose: null
-        status: null
-        yes: null
-        no: null
-        date: null
-        change: null
-        visible: null
-        none: null
-        choosedate: null
-        choosepublication: null
-        title: null
-        settings: null
-        optional: null
-        css: null
-        modified: null
-        firstday: null
-        showdays: null
-        shownav: null
-        width: null
-        height: null
-        rendition: null
-        showfrom: null
-        earliest: null
-        latest: null
-        currentmonth: null
-        currentmsg: null
+            title: 'Günün Məqalələri'
+        choose: Seç...
+        status: 'Status:'
+        yes: Bəli
+        no: Xeyr
+        date: 'Tarix:'
+        change: Dəyiş
+        visible: 'Burada görünür:'
+        none: 'heç biri.'
+        choosedate: 'Tarix seç:'
+        choosepublication: 'Nümayişi seç:'
+        title: 'Günün Təqvim Plaqininin Məqaləsi'
+        settings: Parametrlər
+        optional: 'Könüllü:'
+        css: 'Xüsusi Təqvim vidcetinə xüsusi CSS əlavə et:'
+        modified: 'Son dəyişdirilmiş:'
+        firstday: 'İlk gün'
+        showdays: 'Gün adlarını göstərirsən?'
+        shownav: 'İstiqaməti göstərirsən?'
+        width: 'Şəklin həcmi (piksellə)'
+        height: 'Şəklin hündürlüyü (piksellə)'
+        rendition: 'İfa növü'
+        showfrom: 'Bu tarixdən etibarən günün məqalələrini göstər:'
+        earliest: 'Ən birinci ay'
+        latest: 'Son ay'
+        currentmonth: 'Son ayı mövcud ay kimi quraşdırırsan?'
+        currentmsg: 'Quraşdırıldıqda yuxarıdakı seçim uyğun olmur'
     msg:
-        success: null
-        notset: null
-        unmarked: null
-        saved: null
-        error: null
+        success: 'Müvəffəqiyyətlə quarşdırıldı.'
+        notset: quraşdırılmayıb.
+        unmarked: 'Məqalənin işarəsi müvəffəqiyyətlə çıxarıldı.'
+        saved: 'Uğurla saxlandı.'
+        error: 'Stilin saxlana bilmədi.'
     btn:
-        unmark: null
-        save: null
-        prev: null
-        next: null
+        unmark: 'İşarəni çıxar'
+        save: Saxla
+        prev: 'Keçən Ay'
+        next: 'Növbəti Ay'
