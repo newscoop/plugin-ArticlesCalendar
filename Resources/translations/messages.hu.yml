@@ -14,7 +14,7 @@ plugin:
         choosedate: null
         choosepublication: null
         title: null
-        settings: null
+        settings: Beállítások
         optional: null
         css: null
         modified: null
