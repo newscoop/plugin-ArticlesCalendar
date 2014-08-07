@@ -15,7 +15,7 @@ plugin:
         choosepublication: null
         title: null
         settings: Beállítások
-        optional: null
+        optional: 'Választható:'
         css: null
         modified: null
         firstday: null
