@@ -20,23 +20,23 @@ plugin:
         modified: 'Utolsó módosítás:'
         firstday: 'Első nap'
         showdays: 'Napok neveinek megjelenítése?'
-        shownav: null
+        shownav: 'Navigációs sor megjelenítése?'
         width: 'Kép szélessége (képpontban)'
         height: 'Képe magassága (képpontban)'
         rendition: 'Leképezés típusa'
-        showfrom: null
+        showfrom: 'A nap cikkeinek megjelenítése innen:'
         earliest: 'Legkorábbi hónap'
         latest: 'Legkésőbbi hónap'
-        currentmonth: null
-        currentmsg: null
+        currentmonth: 'Az előző hónap beállítása jelenlegi hónapként? '
+        currentmsg: 'Ha megadod, akkor a fenti beállítás nem érvényes'
     msg:
-        success: null
-        notset: null
-        unmarked: null
+        success: 'Sikeresen beállítva.'
+        notset: 'nincs beállítva.'
+        unmarked: 'A cikk megjelölésének törlése sikerült.'
         saved: 'A mentés sikerült.'
         error: 'Nem lehet menteni a stíluslapot.'
     btn:
-        unmark: null
+        unmark: 'Megjelölés törlése'
         save: Mentés
         prev: 'Előző hónap'
         next: 'Következő hónap'
