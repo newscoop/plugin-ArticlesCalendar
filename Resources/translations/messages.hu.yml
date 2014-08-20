@@ -11,8 +11,8 @@ plugin:
         change: null
         visible: null
         none: null
-        choosedate: null
-        choosepublication: null
+        choosedate: 'Válassz dátumot:'
+        choosepublication: 'Válassz kiadványt:'
         title: null
         settings: Beállítások
         optional: 'Választható:'
