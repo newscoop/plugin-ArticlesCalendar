@@ -1,42 +1,42 @@
-Plugins: null
+Plugins: Bővítmények
 plugin:
     label:
         calendar:
-            title: null
-        choose: null
-        status: null
-        yes: null
-        no: null
-        date: null
-        change: null
-        visible: null
-        none: null
+            title: 'A nap cikkei'
+        choose: Válassz...
+        status: 'Állapot:'
+        yes: Igen
+        no: Nem
+        date: 'Dátum:'
+        change: Módosítás
+        visible: 'Látható:'
+        none: nincs.
         choosedate: 'Válassz dátumot:'
         choosepublication: 'Válassz kiadványt:'
-        title: null
+        title: 'A nap cikke naptárbővítmény'
         settings: Beállítások
         optional: 'Választható:'
-        css: null
-        modified: null
-        firstday: null
-        showdays: null
+        css: 'Egyéni CSS hozzáadása a Naptár widget személyre szabásához:'
+        modified: 'Utolsó módosítás:'
+        firstday: 'Első nap'
+        showdays: 'Napok neveinek megjelenítése?'
         shownav: null
-        width: null
-        height: null
-        rendition: null
+        width: 'Kép szélessége (képpontban)'
+        height: 'Képe magassága (képpontban)'
+        rendition: 'Leképezés típusa'
         showfrom: null
-        earliest: null
-        latest: null
+        earliest: 'Legkorábbi hónap'
+        latest: 'Legkésőbbi hónap'
         currentmonth: null
         currentmsg: null
     msg:
         success: null
         notset: null
         unmarked: null
-        saved: null
-        error: null
+        saved: 'A mentés sikerült.'
+        error: 'Nem lehet menteni a stíluslapot.'
     btn:
         unmark: null
-        save: null
-        prev: null
-        next: null
+        save: Mentés
+        prev: 'Előző hónap'
+        next: 'Következő hónap'
