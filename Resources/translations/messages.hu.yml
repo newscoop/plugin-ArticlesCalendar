@@ -23,7 +23,7 @@ plugin:
         shownav: 'Navigációs sor megjelenítése?'
         width: 'Kép szélessége (képpontban)'
         height: 'Képe magassága (képpontban)'
-        rendition: 'Leképezés típusa'
+        rendition: 'Megjelenítés típusa'
         showfrom: 'A nap cikkeinek megjelenítése innen:'
         earliest: 'Legkorábbi hónap'
         latest: 'Legkésőbbi hónap'
