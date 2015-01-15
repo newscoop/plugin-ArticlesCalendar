@@ -1,42 +1,42 @@
-Plugins: null
+Plugins: Pluginovi
 plugin:
     label:
         calendar:
-            title: null
-        choose: null
-        status: null
-        yes: null
-        no: null
-        date: null
-        change: null
-        visible: null
-        none: null
-        choosedate: null
-        choosepublication: null
-        title: null
-        settings: null
-        optional: null
-        css: null
-        modified: null
-        firstday: null
-        showdays: null
-        shownav: null
-        width: null
-        height: null
-        rendition: null
-        showfrom: null
-        earliest: null
-        latest: null
-        currentmonth: null
-        currentmsg: null
+            title: 'Kalendar vesti dana'
+        choose: Izaberi...
+        status: 'Status:'
+        yes: Da
+        no: Ne
+        date: 'Datum:'
+        change: Promeni
+        visible: 'Vidljivo u:'
+        none: ništa.
+        choosedate: 'Izaberi datum'
+        choosepublication: 'Izaberi publikaciju:'
+        title: 'Plagin Kalendar vesti koje su obeležile dan'
+        settings: Podešavanja
+        optional: 'Opciono:'
+        css: 'Dodaj svoj CSS da prilagodiš izgled Kalendara'
+        modified: 'Poslednja izmena:'
+        firstday: 'Prvi dan'
+        showdays: 'Prikaži nazive dana'
+        shownav: 'Prikaži navigaciju'
+        width: 'Širina slike (u px)'
+        height: 'Visina slike (u px)'
+        rendition: 'Veličina slike'
+        showfrom: 'Prikaži tekstove dana od:'
+        earliest: 'Najraniji mesec'
+        latest: 'Poslednji mesec'
+        currentmonth: 'Podesi poslednji mesec kao trenutni mesec'
+        currentmsg: 'Ukoliko je vrednost postavljena, gornja opcija se ne primenjuje'
     msg:
-        success: null
-        notset: null
-        unmarked: null
-        saved: null
-        error: null
+        success: 'Uspešno postavljeno.'
+        notset: 'nije postavljeno.'
+        unmarked: 'Tekst je uspešno uklonjen.'
+        saved: 'Uspešno snimljeno.'
+        error: 'CSS ne može biti snimljen.'
     btn:
-        unmark: null
-        save: null
-        prev: null
-        next: null
+        unmark: Ukloni
+        save: Snimi
+        prev: 'Prethodni mesec'
+        next: 'Sledeći mesec'
