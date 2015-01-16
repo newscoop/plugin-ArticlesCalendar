@@ -2,7 +2,7 @@ Plugins: Pluginovi
 plugin:
     label:
         calendar:
-            title: 'Kalendar vesti dana'
+            title: 'Kalendar najvažnijih vesti'
         choose: Izaberi...
         status: 'Status:'
         yes: Da
