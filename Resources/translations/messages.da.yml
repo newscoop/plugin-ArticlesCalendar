@@ -23,7 +23,7 @@ plugin:
         shownav: 'Vis navigation?'
         width: 'Billedets bredde (i pixels)'
         height: 'Billedets højde (i pixels)'
-        rendition: 'Gengivelses type'
+        rendition: 'Billedudgave type'
         showfrom: 'Vis dagens artikler fra:'
         earliest: 'Tidligste måned'
         latest: 'Seneste måned'
