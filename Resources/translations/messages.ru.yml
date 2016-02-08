@@ -1,20 +1,20 @@
-Plugins: null
+Plugins: Плагины
 plugin:
     label:
         calendar:
             title: null
-        choose: null
-        status: null
-        yes: null
-        no: null
-        date: null
-        change: null
+        choose: Выбрать...
+        status: 'Статус:'
+        yes: Да
+        no: Нет
+        date: 'Дата:'
+        change: Изменить
         visible: null
         none: null
         choosedate: null
         choosepublication: null
         title: null
-        settings: null
+        settings: Настройки
         optional: null
         css: null
         modified: null
@@ -33,10 +33,10 @@ plugin:
         success: null
         notset: null
         unmarked: null
-        saved: null
+        saved: 'Сохранение завершено.'
         error: null
     btn:
         unmark: null
-        save: null
+        save: Сохранить
         prev: null
         next: null
